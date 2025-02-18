@@ -12,9 +12,8 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
             if (loader.Ammo != null && loader.Ammo.HasPart<StarlitKaleidoscope_TransientAmmo>()) {
                 if (E.Actor.IsPlayer())
                     IComponent<GameObject>.EmitMessage(
-                        E.Actor, 
-                        "The " + loader.Ammo.Does("melt") + " away as you unload " + 
-                        loader.Ammo.GetPronounProvider().Objective + "."
+                        E.Actor,
+                        loader.Ammo.Does("melt") + " away as you unload " + loader.Ammo.GetPronounProvider().Objective + "."
                     );
                 loader.SetAmmo(null);
                 return true;
