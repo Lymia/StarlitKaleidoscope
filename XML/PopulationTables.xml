@@ -1,4 +1,5 @@
-﻿<populations>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<populations>
     <!-- Make Burgeoning less likely to result in you dying.-->
     <population Name="PlantSummoning1">
         <group Name="Summons" Style="pickone">

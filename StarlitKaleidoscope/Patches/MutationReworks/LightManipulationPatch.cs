@@ -9,7 +9,7 @@ using XRL.World.Parts.Mutation;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Local
-namespace StarlitKaleidoscope.MutationReworks {
+namespace StarlitKaleidoscope.Patches.MutationReworks {
     public static class LightManipulationPatch {
         public static int GetMaxLightRadius(int Level) =>
             4 + Level / 2 + GetMinLightRadius(Level);

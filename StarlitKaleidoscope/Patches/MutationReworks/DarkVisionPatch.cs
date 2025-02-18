@@ -4,7 +4,7 @@ using XRL.World.Parts.Mutation;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Local
-namespace StarlitKaleidoscope.MutationReworks {
+namespace StarlitKaleidoscope.Patches.MutationReworks {
     [HarmonyPatch(typeof(DarkVision))]
     internal static class DarkVisionPatchRadius {
         static MethodBase TargetMethod() {

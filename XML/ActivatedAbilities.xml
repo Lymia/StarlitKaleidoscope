@@ -1,4 +1,16 @@
-﻿<activatedabilities>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<activatedabilities>
+    <!-- Frost Condensation -->
+    <ability Command="StarlitKaleidoscope_FrostCondensation">
+        <description>
+            <p>You focus your ambient light into a laser beam.</p>
+            <p>Temporarily reduces the radius of your ambient light by 1, to a minimum of <stat Name="MinRadius"/>.</p>
+            <p>Targets you hit glow for a short time, causing them to suffer a DV penalty.</p>
+        </description>
+        <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_off.png" Foreground="b" Detail="C" />
+        <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_on.png" Foreground="B" Detail="C" State="ToggleOn" />
+    </ability>
+    
     <!-- Reworked Light Manipulation. -->
     <ability Command="CommandLase">
         <description>
