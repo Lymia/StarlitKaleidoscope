@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
+﻿using System.Reflection;
 using HarmonyLib;
-using Mods.StarlitKaleidoscope.Effects;
-using XRL;
-using XRL.World;
 using XRL.World.Parts.Mutation;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Local
-namespace Mods.StarlitKaleidoscope.MutationReworks {
+namespace StarlitKaleidoscope.MutationReworks {
     [HarmonyPatch(typeof(DarkVision))]
     internal static class DarkVisionPatchRadius {
         static MethodBase TargetMethod() {

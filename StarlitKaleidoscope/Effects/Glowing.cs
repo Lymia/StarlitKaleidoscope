@@ -2,7 +2,7 @@
 using XRL.Rules;
 using XRL.World;
 
-namespace Mods.StarlitKaleidoscope.Effects {
+namespace StarlitKaleidoscope.Effects {
     [Serializable]
     public class Glowing : Effect, ITierInitialized {
         public int GlowRadius;

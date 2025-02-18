@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
-using Mods.StarlitKaleidoscope.Effects;
+using StarlitKaleidoscope.Effects;
 using XRL;
 using XRL.World;
 using XRL.World.Parts.Mutation;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Local
-namespace Mods.StarlitKaleidoscope.MutationReworks {
+namespace StarlitKaleidoscope.MutationReworks {
     public static class LightManipulationPatch {
         public static int GetMaxLightRadius(int Level) =>
             4 + Level / 2 + GetMinLightRadius(Level);
