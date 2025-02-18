@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 using Mods.StarlitKaleidoscope.Effects;
+using XRL;
 using XRL.World;
 using XRL.World.Parts.Mutation;
 
@@ -30,6 +31,23 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
                 GetMinLightRadius(self.Level), GetDvPenalty(self.Level), GetGlowDuration(self.Level)
             ));
         }
+
+        public static String NewDescription(LightManipulation self, int Level) {
+            return "You produce ambient light within a radius of {{rules|" + self.GetMaxLightRadius(Level) + "}}.\n" +
+                   "You may focus the light into a laser beam, temporarily reducing the radius of your ambient light by 1, " +
+                   "to a minimum of {{rules|" + GetMinLightRadius(Level) + "}}.\n" +
+                   "Targets you hit glow for a short time, causing them to suffer a DV penalty.\n" +
+                   "\n" +
+                   "Laser damage increment: {{rules|" + self.GetDamage(Level) + "}}\n" +
+                   "Laser penetration: {{rules|" + (self.GetLasePenetrationBonus(Level) + 4) + "}}\n" +
+                   "Illuminated light radius: {{rules|" + (GetMinLightRadius(Level) + 4) + "}}\n" +
+                   "Illuminated DV penalty: {{rules|" + (GetDvPenalty(Level) + 4) + "}}\n" +
+                   "Illuminated duration: {{rules|" + (GetGlowDuration(Level) + 4) + "}}\n" +
+                   "\n" +
+                   "Ambient light recharges at a rate of 1 unit every " + self.GetRadiusRegrowthTurns() + 
+                   " rounds until it reaches its maximum value.\n" + 
+                   "{{rules|" + self.GetReflectChance(Level).ToString() + "%}} chance to reflect light-based damage";
+        }
     }
 
     // low level functions
@@ -48,6 +66,15 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
         
         internal static void FinalizeCall() {
             laseTarget = null;
+        }
+    }
+    
+    // Patch detailed description
+    [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.GetLevelText))]
+    internal static class LightManipulationPatchDescription {
+        static bool Prefix(out String __result, LightManipulation __instance, int Level) {
+            __result = LightManipulationPatch.NewDescription(__instance, Level);
+            return false;
         }
     }
     
@@ -135,6 +162,25 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
 
         static void Finalizer() {
             LightManipulationPatchLL.FinalizeCall();
+        }
+    }
+    
+    // Fix lase text on level up
+    [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.ChangeLevel))]
+    internal static class LightManipulationPatchChangeLevel {
+        static void Postfix(LightManipulation __instance) {
+            __instance.SyncAbilityName();
+        }
+    }
+    
+    // Expose additional fields to the ability text
+    [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.CollectStats))]
+    internal static class LightManipulationPatchCollectStats {
+        static void Postfix(LightManipulation __instance, Templates.StatCollector stats, int Level) {
+            stats.Set("MinRadius", LightManipulationPatch.GetMinLightRadius(Level), !stats.mode.Contains("ability"));
+            stats.Set("DvPenalty", LightManipulationPatch.GetDvPenalty(Level), !stats.mode.Contains("ability"));
+            stats.Set("GlowDuration", LightManipulationPatch.GetGlowDuration(Level), !stats.mode.Contains("ability"));
+            stats.Set("GlowRadius", LightManipulationPatch.GetMinLightRadius(Level), !stats.mode.Contains("ability"));
         }
     }
 }

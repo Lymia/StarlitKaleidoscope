@@ -1,0 +1,27 @@
+﻿<activatedabilities>
+    <!-- Reworked Light Manipulation. -->
+    <ability Command="CommandLase">
+        <description>
+            <p>You focus your ambient light into a laser beam.</p>
+            <p>Temporarily reduces the radius of your ambient light by 1, to a minimum of <stat Name="MinRadius"/>.</p>
+            <p>Targets you hit glow for a short time, causing them to suffer a DV penalty.</p>
+            <br/>
+            <statline Name="LaserDamageInc" DisplayName="Laser damage increment" />
+            <statline Name="LaserPen" DisplayName="Laser penetration" />
+            <statline Name="GlowRadius" DisplayName="Illuminated light radius" />
+            <statline Name="DvPenalty" DisplayName="Illuminated DV penalty" />
+            <statline Name="GlowDuration" DisplayName="Illuminated duration" />
+        </description>
+        <UITile Tile="Mutations/light_manipulation.bmp" Foreground="Y" Detail="C" />
+    </ability>
+    <ability Command="CommandAmbientLight">
+        <description>
+            <p>You produce ambient light within a radius of <stat Name="Radius" />.</p>
+            <p>You may focus the light into a laser beam, temporarily reducing the radius by 1, to a minimum of <stat Name="MinRadius"/>.</p>
+            <br />
+            <statline Name="RechargeRate" DisplayName="Ambient light recharge rate" />
+        </description>
+        <UITile Tile="Abilities/abil_ambient_light_toggle_off.bmp" Foreground="y" Detail="C" />
+        <UITile Tile="Abilities/abil_ambient_light_toggle_on.bmp" Foreground="Y" Detail="C" State="ToggleOn" />
+    </ability>
+</activatedabilities>

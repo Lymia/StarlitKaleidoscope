@@ -9,7 +9,7 @@ namespace Mods.StarlitKaleidoscope.Effects {
         public int DvPenalty;
 
         public Glowing() {
-            DisplayName = "{{Y|glowing}}";
+            DisplayName = "{{Y|illuminated}}";
             GlowRadius = 2;
             DvPenalty = 1;
             Duration = 10;
@@ -25,12 +25,12 @@ namespace Mods.StarlitKaleidoscope.Effects {
             GlowRadius = 2 + Tier / 3;
             DvPenalty = 1 + Tier / 2;
             Duration = Stat.Random(10, 30);
-        }
-        
+        } 
+
         public override bool UseStandardDurationCountdown() => true;
         public override string GetDetails() => "-" + DvPenalty + " DV";
-        public override string GetDescription() => "{{Y|glowing ({{C|-" + DvPenalty + " DV}})}}";
-        public override string GetStateDescription() => "{{Y|glowing}}";
+        public override string GetDescription() => "{{Y|illuminated ({{C|-" + DvPenalty + " DV}})}}";
+        public override string GetStateDescription() => "{{Y|illuminated}}";
         
         public override bool WantEvent(int ID, int cascade) {
             return base.WantEvent(ID, cascade) || ID == BeforeRenderEvent.ID;
@@ -41,12 +41,20 @@ namespace Mods.StarlitKaleidoscope.Effects {
             return base.HandleEvent(E);
         }
 
-        public override bool Apply(GameObject Object) {
+        public override bool Apply(GameObject obj) {
+            var existingEffect = obj.GetEffect<Glowing>();
+            if (existingEffect != null) {
+                if (existingEffect.DvPenalty < DvPenalty) existingEffect.DvPenalty = DvPenalty;
+                if (existingEffect.GlowRadius < GlowRadius) existingEffect.GlowRadius = GlowRadius;
+                if (existingEffect.Duration < Duration) existingEffect.Duration = Duration;
+                return false;
+            }
+            
             ApplyStats();
             return true;
         }
 
-        public override void Remove(GameObject Object) => UnapplyStats();
+        public override void Remove(GameObject obj) => UnapplyStats();
 
         void ApplyStats() => this.StatShifter.SetStatShift("DV", -this.DvPenalty);
 
