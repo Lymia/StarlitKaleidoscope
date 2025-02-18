@@ -20,6 +20,9 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
         public static int GetDvPenalty(int Level) =>
             1 + (Level + 1) / 4;
 
+        public static int GetGlowLightRadius(int Level) =>
+            GetMinLightRadius(Level);
+        
         public static int GetGlowDuration(int Level) =>
             9 + Level;
 
@@ -28,7 +31,7 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
 
         public static void ApplyGlowingEffect(LightManipulation self, GameObject target) {
             target.ApplyEffect(new Glowing(
-                GetMinLightRadius(self.Level), GetDvPenalty(self.Level), GetGlowDuration(self.Level)
+                GetGlowLightRadius(self.Level), GetDvPenalty(self.Level), GetGlowDuration(self.Level)
             ));
         }
 
@@ -40,13 +43,13 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
                    "\n" +
                    "Laser damage increment: {{rules|" + self.GetDamage(Level) + "}}\n" +
                    "Laser penetration: {{rules|" + (self.GetLasePenetrationBonus(Level) + 4) + "}}\n" +
-                   "Illuminated light radius: {{rules|" + (GetMinLightRadius(Level) + 4) + "}}\n" +
+                   "Illuminated light radius: {{rules|" + (GetGlowLightRadius(Level) + 4) + "}}\n" +
                    "Illuminated DV penalty: {{rules|" + (GetDvPenalty(Level) + 4) + "}}\n" +
                    "Illuminated duration: {{rules|" + (GetGlowDuration(Level) + 4) + "}}\n" +
                    "\n" +
                    "Ambient light recharges at a rate of 1 unit every " + self.GetRadiusRegrowthTurns() + 
                    " rounds until it reaches its maximum value.\n" + 
-                   "{{rules|" + self.GetReflectChance(Level).ToString() + "%}} chance to reflect light-based damage";
+                   "{{rules|" + self.GetReflectChance(Level) + "%}} chance to reflect light-based damage";
         }
     }
 
@@ -180,7 +183,7 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
             stats.Set("MinRadius", LightManipulationPatch.GetMinLightRadius(Level), !stats.mode.Contains("ability"));
             stats.Set("DvPenalty", LightManipulationPatch.GetDvPenalty(Level), !stats.mode.Contains("ability"));
             stats.Set("GlowDuration", LightManipulationPatch.GetGlowDuration(Level), !stats.mode.Contains("ability"));
-            stats.Set("GlowRadius", LightManipulationPatch.GetMinLightRadius(Level), !stats.mode.Contains("ability"));
+            stats.Set("GlowRadius", LightManipulationPatch.GetGlowLightRadius(Level), !stats.mode.Contains("ability"));
         }
     }
 }
