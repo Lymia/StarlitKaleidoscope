@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using StarlitKaleidoscope.Effects;
@@ -138,6 +139,7 @@ namespace StarlitKaleidoscope.Patches.MutationReworks {
             
             // store the lase target
             codeMatcher
+                .Start()
                 .MatchStartForward(
                     new CodeMatch(
                         OpCodes.Callvirt, 
@@ -150,8 +152,12 @@ namespace StarlitKaleidoscope.Patches.MutationReworks {
             
             // inject the glowing effect call
             codeMatcher
+                .Start()
                 .MatchStartForward(
-                    new CodeMatch(() => default(GameObject).TakeDamage(default, default, default))
+                    new CodeMatch(instr =>
+                        instr.opcode == OpCodes.Callvirt && instr.operand is MethodInfo info && 
+                        info.DeclaringType == typeof(GameObject) && info.Name == "TakeDamage"
+                    )
                 )
                 .ThrowIfInvalid("Could not find call to GameObject.TakeDamage")
                 .Advance(1)

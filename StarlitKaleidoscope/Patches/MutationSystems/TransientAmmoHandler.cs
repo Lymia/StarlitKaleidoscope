@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
 using XRL.World;
@@ -24,18 +25,15 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator) {
             var codeMatcher = new CodeMatcher(instructions, generator);
             
-            // Insert a "return true" branch at the end of the code.
-            var returnTrueLabel = codeMatcher.End().Pos;
+            var label = new Label();
             codeMatcher
-                .End()
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ldc_I4_1)) // true
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ret));
-            
-            // Insert our check after the code to play sounds.
-            codeMatcher
+                .Start()
                 .MatchStartForward(
-                    new CodeMatch(() => default(GameObject).PlayWorldSoundTag(default, default, default, default)
-                ))
+                    new CodeMatch(
+                        OpCodes.Callvirt,
+                        AccessTools.Method(typeof(GameObject), "PlayWorldSoundTag")
+                    )
+                )
                 .ThrowIfInvalid("Could not find call to GameObject.PlayWorldSoundTag")
                 .Advance(1)
                 .InsertAndAdvance(new CodeInstruction(OpCodes.Ldarg_0)) // this
@@ -43,7 +41,10 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                 .InsertAndAdvance(
                     CodeInstruction.Call(() => CheckIsTransientAmmo(default, default))
                 )
-                .InsertBranchAndAdvance(OpCodes.Brtrue, returnTrueLabel);
+                .InsertAndAdvance(new CodeInstruction(OpCodes.Brfalse, label))
+                .InsertAndAdvance(new CodeInstruction(OpCodes.Ldc_I4_1))
+                .InsertAndAdvance(new CodeInstruction(OpCodes.Ret))
+                .AddLabels(new[] { label });
         
             return codeMatcher.Instructions();
         }
