@@ -1,0 +1,10 @@
+{
+	"id": "StarlitKaleidoscope",
+	"loadorder": 1,
+	"title": "Starlit Kaliedoscope",
+	"description": "Adds character options and items to allow much more colorful and varied player character builds.",
+	"tags": "Mutations",
+	"version": "0.1.0",
+	"author": "Rimi",
+	"previewImage": "preview.png"
+}
