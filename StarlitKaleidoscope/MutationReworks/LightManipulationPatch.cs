@@ -26,7 +26,7 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
         public static int GetGlowDuration(int Level) =>
             9 + Level;
 
-        public static int MaxUsedCharges(LightManipulation self) =>
+        public static int MaxLaseCharges(LightManipulation self) =>
             GetMaxLightRadius(self.Level) - GetMinLightRadius(self.Level);
 
         public static void ApplyGlowingEffect(LightManipulation self, GameObject target) {
@@ -94,7 +94,7 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
     [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.HandleEvent), typeof(CommandEvent))]
     internal static class LightManipulationPatchHandleEventCommandEvent {
         internal static void PatchLightRadius(CodeMatcher codeMatcher) {
-            // replace the call to get_MaxLightRadius with a call to maxUsedCharges
+            // replace the call to get_MaxLightRadius with a call to MaxLaseCharges
             codeMatcher
                 .MatchStartForward(
                     new CodeMatch(
@@ -107,7 +107,7 @@ namespace Mods.StarlitKaleidoscope.MutationReworks {
                     matchAction: cm => {
                         cm.RemoveInstruction();
                         cm.InsertAndAdvance(
-                            CodeInstruction.Call(() => LightManipulationPatch.MaxUsedCharges(default))
+                            CodeInstruction.Call(() => LightManipulationPatch.MaxLaseCharges(default))
                         );
                     }
                 );
