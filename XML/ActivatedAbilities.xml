@@ -3,9 +3,12 @@
     <!-- Frost Condensation -->
     <ability Command="StarlitKaleidoscope_FrostCondensation">
         <description>
-            <p>You focus your ambient light into a laser beam.</p>
-            <p>Temporarily reduces the radius of your ambient light by 1, to a minimum of <stat Name="MinRadius"/>.</p>
-            <p>Targets you hit glow for a short time, causing them to suffer a DV penalty.</p>
+            <p>You may load frost slugs and frost bullets into weapons when you reload them. 
+                They deal cold damage, and chill enemies they hit. This cannot freeze enemies.</p>
+            <br/>
+            <statline Name="PenetrationBonus" DisplayName="Bonus penetration" />
+            <statline Name="DamageBonus" DisplayName="Bonus damage" />
+            <statline Name="TemperatureChange" DisplayName="Temperature reduction" />
         </description>
         <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_off.png" Foreground="b" Detail="C" />
         <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_on.png" Foreground="B" Detail="C" State="ToggleOn" />
