@@ -30,10 +30,8 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
 
         public static GameObject GetProjectileFor(GameObject Ammo, GameObject Launcher) {
             GameObject target = GetProjectileObjectEvent.GetFor(Ammo, Launcher);
-            var overrideProjectile = Ammo.GetPart<StarlitKaleidoscope_OverrideWeaponProjectile>();
-            if (overrideProjectile != null) {
-                var targetProjectile = target.GetPart<Projectile>();
-                if (targetProjectile != null) {
+            if (Ammo.TryGetPart<StarlitKaleidoscope_OverrideWeaponProjectile>(out var overrideProjectile)) {
+                if (target.TryGetPart<Projectile>(out var targetProjectile)) {
                     if (overrideProjectile.OverrideStats) {
                         targetProjectile.BasePenetration = overrideProjectile.BasePenetration;
                         targetProjectile.BaseDamage = overrideProjectile.BaseDamage;
@@ -45,8 +43,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                     }
                 }
 
-                var targetFrostCondensation = target.GetPart<StarlitKaleidoscope_FrostCondensationOnHit>();
-                if (targetFrostCondensation != null)
+                if (target.TryGetPart<StarlitKaleidoscope_FrostCondensationOnHit>(out var targetFrostCondensation))
                     if (overrideProjectile.FrostCondensationTemperatureChange != null)
                         targetFrostCondensation.Amount = overrideProjectile.FrostCondensationTemperatureChange;
             }

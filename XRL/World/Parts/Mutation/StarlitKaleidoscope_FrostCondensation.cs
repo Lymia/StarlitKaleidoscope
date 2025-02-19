@@ -1,5 +1,4 @@
 ﻿using System;
-using AiUnity.Common.Extensions;
 using XRL.Messages;
 using XRL.Rules;
 using XRL.UI;
@@ -51,8 +50,10 @@ namespace XRL.World.Parts.Mutation {
         }
 
         bool checkCanLoadAmmo(GameObject Weapon, out MagazineAmmoLoader loader) {
-            var ammoLoader = Weapon.GetPart<MagazineAmmoLoader>();
-            if (ammoLoader != null && (ammoLoader.AmmoPart == "AmmoSlug" || ammoLoader.AmmoPart == "AmmoArrow")) {
+            if (
+                Weapon.TryGetPart<MagazineAmmoLoader>(out var ammoLoader) && 
+                ammoLoader.AmmoPart is "AmmoSlug" or "AmmoArrow"
+            ) {
                 if (IsMyActivatedAbilityToggledOn(FrostCondensationActivatedAbilityID)) {
                     loader = ammoLoader;
                     return true;
@@ -73,6 +74,7 @@ namespace XRL.World.Parts.Mutation {
                 var ammo = GameObject.Create(isSlug ? FrostSlugItem : FrostArrowItem);
                 ammo.Count = ammoLoader.MaxAmmo;
                 var overrideStats = ammo.GetPart<StarlitKaleidoscope_OverrideWeaponProjectile>();
+                if (overrideStats == null) throw new Exception("OverrideWeaponProjectile part is missing?");
                 overrideStats.OverrideStats = true;
 
                 // inherit base weapon stats, if possible
@@ -81,8 +83,7 @@ namespace XRL.World.Parts.Mutation {
                 overrideStats.Attributes = "Cold ,Cold"; // hack to deal with some parsing problems downstream
                 if (ammoLoader.ProjectileObject != null) {
                     var defaultProjectile = GameObject.Create(ammoLoader.ProjectileObject, Context: "Projectile");
-                    var projectilePart = defaultProjectile.GetPart<Projectile>();
-                    if (projectilePart != null) {
+                    if (defaultProjectile.TryGetPart<Projectile>(out var projectilePart)) {
                         overrideStats.BasePenetration = projectilePart.BasePenetration;
                         overrideStats.BaseDamage = projectilePart.BaseDamage;
                         if (!projectilePart.Attributes.IsNullOrEmpty())
