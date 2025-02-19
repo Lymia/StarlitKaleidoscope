@@ -15,7 +15,7 @@
         <part Name="AmmoSlug" ProjectileObject="StarlitKaleidoscope_ProjectileFrostSlug"/>
         <part Name="Physics" Category="Ammo"/>
         <part Name="Description" Short="Frost shaped by mere willpower into a facsimile of a bullet."/>
-        <part Name="StarlitKaleidoscope_TransientAmmo"/>
+        <intproperty Name="StarlitKaleidoscope_TransientAmmo" Value="1"/>
         <part Name="StarlitKaleidoscope_OverrideWeaponProjectile"/>
         <tag Name="DynamicObjectsTable:Ammo"/>
         <tag Name="TurretStockExclusive"/>
@@ -30,7 +30,7 @@
         <part Name="AmmoArrow" ProjectileObject="StarlitKaleidoscope_ProjectileFrostArrow" />
         <part Name="Description" Short="Frost shaped by mere willpower into a facsimile of an arrow." />
         <part Name="MissileStatusColor" Color="w" />
-        <part Name="StarlitKaleidoscope_TransientAmmo"/>
+        <intproperty Name="StarlitKaleidoscope_TransientAmmo" Value="1"/>
         <part Name="StarlitKaleidoscope_OverrideWeaponProjectile"/>
         <tag Name="ExcludeFromTurretStock" />
     </object>

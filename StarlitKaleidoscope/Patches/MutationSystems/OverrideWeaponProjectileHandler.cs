@@ -35,9 +35,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                 var targetProjectile = target.GetPart<Projectile>();
                 if (targetProjectile != null) {
                     if (overrideProjectile.OverrideStats) {
-                        var originalPen = targetProjectile.BasePenetration;
                         targetProjectile.BasePenetration = overrideProjectile.BasePenetration;
-                        var originalDmg = targetProjectile.BaseDamage;
                         targetProjectile.BaseDamage = overrideProjectile.BaseDamage;
                     }
                     if (!overrideProjectile.Attributes.IsNullOrEmpty()) {
@@ -56,9 +54,8 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
         }
 
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator) {
-            var codeMatcher = new CodeMatcher(instructions, generator);
-
             // Override ProjectileObject for weapons with OverrideWeaponProjectile.
+            var codeMatcher = new CodeMatcher(instructions, generator);
             codeMatcher
                 .Start()
                 .MatchStartForward(
@@ -72,20 +69,14 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                     cm.RemoveInstruction();
                     cm.InsertAndAdvance(CodeInstruction.Call(() => GetProjectileObject(default)));
                 });
+            instructions = codeMatcher.Instructions();
             
             // Replace the GetProjectileObjectEvent.GetFor calls to allow for editing the stats
-            codeMatcher
-                .Start()
-                .MatchStartForward(
-                    new CodeMatch(OpCodes.Call, AccessTools.Method(typeof(GetProjectileObjectEvent), "GetFor"))
-                )
-                .ThrowIfInvalid("Could not find accesses to GetProjectileObjectEvent.GetFor")
-                .Repeat(cm => {
-                    cm.RemoveInstruction();
-                    cm.InsertAndAdvance(CodeInstruction.Call(() => GetProjectileFor(default, default)));
-                });
+            var meth_from = AccessTools.Method(typeof(GetProjectileObjectEvent), "GetFor");
+            var meth_to = AccessTools.Method(typeof(OverrideWeaponProjectileHandler), "GetProjectileFor");
+            instructions = Transpilers.MethodReplacer(instructions, meth_from, meth_to);
 
-            return codeMatcher.Instructions();
+            return instructions;
         }
     }
 }

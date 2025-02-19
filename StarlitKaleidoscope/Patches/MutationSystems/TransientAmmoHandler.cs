@@ -9,11 +9,10 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
     [HarmonyPatch(typeof(MagazineAmmoLoader), nameof(MagazineAmmoLoader.HandleEvent), typeof(InventoryActionEvent))]
     public static class TransientAmmoHandler {
         public static bool CheckIsTransientAmmo(MagazineAmmoLoader loader, InventoryActionEvent E) {
-            if (loader.Ammo != null && loader.Ammo.HasPart<StarlitKaleidoscope_TransientAmmo>()) {
+            if (loader.Ammo != null && loader.Ammo.GetIntProperty("StarlitKaleidoscope_TransientAmmo") == 1) {
                 if (E.Actor.IsPlayer())
-                    IComponent<GameObject>.EmitMessage(
-                        E.Actor,
-                        loader.Ammo.Does("melt") + " away as you unload " + loader.Ammo.GetPronounProvider().Objective + "."
+                    E.Actor.EmitMessage(
+                        loader.Ammo.Does("melt") + " away as you unload " + loader.Ammo.them + "."
                     );
                 loader.SetAmmo(null);
                 return true;
@@ -24,7 +23,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator) {
             var codeMatcher = new CodeMatcher(instructions, generator);
             
-            var label = new Label();
+            var label = generator.DefineLabel();
             codeMatcher
                 .Start()
                 .MatchStartForward(
@@ -35,14 +34,14 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                 )
                 .ThrowIfInvalid("Could not find call to GameObject.PlayWorldSoundTag")
                 .Advance(1)
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ldarg_0)) // this
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ldarg_1)) // E
                 .InsertAndAdvance(
-                    CodeInstruction.Call(() => CheckIsTransientAmmo(default, default))
+                    new CodeInstruction(OpCodes.Ldarg_0), // this
+                    new CodeInstruction(OpCodes.Ldarg_1), // E
+                    CodeInstruction.Call(() => CheckIsTransientAmmo(default, default)),
+                    new CodeInstruction(OpCodes.Brfalse, label),
+                    new CodeInstruction(OpCodes.Ldc_I4_1),
+                    new CodeInstruction(OpCodes.Ret)
                 )
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Brfalse, label))
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ldc_I4_1))
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ret))
                 .AddLabels(new[] { label });
         
             return codeMatcher.Instructions();

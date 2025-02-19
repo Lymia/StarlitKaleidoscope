@@ -54,25 +54,6 @@ namespace StarlitKaleidoscope.Patches.MutationReworks {
         }
     }
 
-    // low level functions
-    public static class LightManipulationPatchLL {
-        [ThreadStatic]
-        static GameObject laseTarget;
-
-        public static GameObject WithLaseTarget(GameObject target) {
-            laseTarget = target;
-            return target;
-        }
-
-        public static void ApplyGlowingEffect(LightManipulation self) {
-            LightManipulationPatch.ApplyGlowingEffect(self, laseTarget);
-        }
-        
-        internal static void FinalizeCall() {
-            laseTarget = null;
-        }
-    }
-    
     // Patch detailed description
     [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.GetLevelText))]
     internal static class LightManipulationPatchDescription {
@@ -91,43 +72,22 @@ namespace StarlitKaleidoscope.Patches.MutationReworks {
         }
     }
     
-    // Patch minimum radius
-    [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.HandleEvent), typeof(CommandEvent))]
-    internal static class LightManipulationPatchHandleEventCommandEvent {
-        internal static void PatchLightRadius(CodeMatcher codeMatcher) {
+    // Patch minimum light radius
+    [HarmonyPatch(typeof(LightManipulation))]
+    internal static class LightManipulationPatchMinLightRadius {
+        static IEnumerable<MethodBase> TargetMethods() {
+            var result = new List<MethodBase>();
+            result.Add(AccessTools.Method(typeof(LightManipulation), "HandleEvent", new[] { typeof(CommandEvent) }));
+            result.Add(AccessTools.Method(typeof(LightManipulation), "SyncAbilityName"));
+            return result;
+        }
+
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
             // replace the call to get_MaxLightRadius with a call to MaxLaseCharges
-            codeMatcher
-                .MatchStartForward(
-                    new CodeMatch(
-                        OpCodes.Call,
-                        AccessTools.DeclaredPropertyGetter(typeof(LightManipulation), "MaxLightRadius")
-                    )
-                )
-                .ThrowIfInvalid("Could not find call to LightManipulation.get_MaxLightRadius")
-                .Repeat(
-                    matchAction: cm => {
-                        cm.RemoveInstruction();
-                        cm.InsertAndAdvance(
-                            CodeInstruction.Call(() => LightManipulationPatch.MaxLaseCharges(default))
-                        );
-                    }
-                );
-        }
-        
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
-            var codeMatcher = new CodeMatcher(instructions);
-            PatchLightRadius(codeMatcher);
-            return codeMatcher.Instructions();
-        }
-    }
-    
-    // Patch max charges display
-    [HarmonyPatch(typeof(LightManipulation), nameof(LightManipulation.SyncAbilityName))]
-    internal static class LightManipulationPatchSyncAbilityName {
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
-            var codeMatcher = new CodeMatcher(instructions);
-            LightManipulationPatchHandleEventCommandEvent.PatchLightRadius(codeMatcher);
-            return codeMatcher.Instructions();
+            var func_getMaxLightRadius = AccessTools.DeclaredPropertyGetter(typeof(LightManipulation), "MaxLightRadius");
+            var func_maxLaseCharges =
+                AccessTools.Method(typeof(LightManipulationPatch), nameof(LightManipulationPatch.MaxLaseCharges));
+            return instructions.MethodReplacer(func_getMaxLightRadius, func_maxLaseCharges);
         }
     }
     
@@ -138,39 +98,39 @@ namespace StarlitKaleidoscope.Patches.MutationReworks {
             var codeMatcher = new CodeMatcher(instructions);
             
             // store the lase target
-            codeMatcher
+            var storeLocation = codeMatcher
                 .Start()
                 .MatchStartForward(
                     new CodeMatch(
-                        OpCodes.Callvirt, 
+                        OpCodes.Callvirt,
                         AccessTools.Method(typeof(Cell), nameof(Cell.GetCombatTarget))
-                    )
+                    ),
+                    new CodeMatch(instr => instr.IsStloc())
                 )
-                .ThrowIfInvalid("Could not find call to Cell.GetCombatTarget")
-                .Advance(1)
-                .InsertAndAdvance(CodeInstruction.Call(() => LightManipulationPatchLL.WithLaseTarget(default)));
+                .ThrowIfInvalid("Could not find call to Cell.GetCombatTarget + store sequence")
+                .Advance(1) // advance to the stloc instruction
+                .Instruction;
+            var loadInstruction = PatchUtils.StlocToLdloc(storeLocation);
             
             // inject the glowing effect call
             codeMatcher
                 .Start()
-                .MatchStartForward(
+                .MatchEndForward(
                     new CodeMatch(instr =>
+                        // It's too annoying to get the right version of TakeDamage
                         instr.opcode == OpCodes.Callvirt && instr.operand is MethodInfo info && 
                         info.DeclaringType == typeof(GameObject) && info.Name == "TakeDamage"
                     )
                 )
                 .ThrowIfInvalid("Could not find call to GameObject.TakeDamage")
                 .Advance(1)
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Ldarg_0)) // this
                 .InsertAndAdvance(
-                    CodeInstruction.Call(() => LightManipulationPatchLL.ApplyGlowingEffect(default))
+                    new CodeInstruction(OpCodes.Ldarg_0), // this
+                    loadInstruction,
+                    CodeInstruction.Call(() => LightManipulationPatch.ApplyGlowingEffect(default, default))
                 );
         
             return codeMatcher.Instructions();
-        }
-
-        static void Finalizer() {
-            LightManipulationPatchLL.FinalizeCall();
         }
     }
     

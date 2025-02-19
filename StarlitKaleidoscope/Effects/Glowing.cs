@@ -25,7 +25,9 @@ namespace StarlitKaleidoscope.Effects {
             GlowRadius = 2 + Tier / 3;
             DvPenalty = 1 + Tier / 2;
             Duration = Stat.Random(10, 30);
-        } 
+        }
+
+        public override int GetEffectType() => TYPE_GENERAL | TYPE_NEGATIVE;
 
         public override bool UseStandardDurationCountdown() => true;
         public override string GetDetails() => "-" + DvPenalty + " DV";
@@ -42,11 +44,11 @@ namespace StarlitKaleidoscope.Effects {
         }
 
         public override bool Apply(GameObject obj) {
-            var existingEffect = obj.GetEffect<Glowing>();
-            if (existingEffect != null) {
+            if (obj.TryGetEffect<Glowing>(out var existingEffect)) {
                 if (existingEffect.DvPenalty < DvPenalty) existingEffect.DvPenalty = DvPenalty;
                 if (existingEffect.GlowRadius < GlowRadius) existingEffect.GlowRadius = GlowRadius;
                 if (existingEffect.Duration < Duration) existingEffect.Duration = Duration;
+                ApplyStats();
                 return false;
             }
             
@@ -56,7 +58,7 @@ namespace StarlitKaleidoscope.Effects {
 
         public override void Remove(GameObject obj) => UnapplyStats();
 
-        void ApplyStats() => this.StatShifter.SetStatShift("DV", -this.DvPenalty);
+        void ApplyStats() => this.StatShifter.SetStatShift("DV", -DvPenalty);
 
         void UnapplyStats() => this.StatShifter.RemoveStatShifts();
     }

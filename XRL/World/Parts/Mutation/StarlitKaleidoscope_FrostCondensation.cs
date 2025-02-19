@@ -19,9 +19,9 @@ namespace XRL.World.Parts.Mutation {
 
         public override string GetDescription() => "You gather frost from the air and condense it into projectiles.";
         
-        public int ProjectilePenetrationBonus(int Level) => 1 + Level / 4;
-        public int ProjectileDamageBonus(int Level) => Level / 2;
-        public string ProjectileTemperatureChange(int Level) => $"-{Level}d8";
+        public int ProjectilePenetrationBonus(int Level) => Level / 4;
+        public int ProjectileDamageBonus(int Level) => 1 + (Level + 1) / 2;
+        public string ProjectileTemperatureChange(int Level) => $"-{Level}d6";
         
         public override string GetLevelText(int Level) {
             return "You may load frost slugs and frost bullets into weapons when you reload them. " +
