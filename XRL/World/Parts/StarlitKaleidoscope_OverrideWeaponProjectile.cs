@@ -11,5 +11,6 @@ namespace XRL.World.Parts {
         public string Attributes = "";
 
         public string FrostCondensationTemperatureChange = null;
+        public string FrostCondensationBonusColdDamage = null;
     }
 }

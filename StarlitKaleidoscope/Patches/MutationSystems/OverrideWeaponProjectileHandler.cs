@@ -43,9 +43,12 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                     }
                 }
 
-                if (target.TryGetPart<StarlitKaleidoscope_FrostCondensationOnHit>(out var targetFrostCondensation))
+                if (target.TryGetPart<StarlitKaleidoscope_FrostCondensationOnHit>(out var targetFrostCondensation)) {
                     if (overrideProjectile.FrostCondensationTemperatureChange != null)
-                        targetFrostCondensation.Amount = overrideProjectile.FrostCondensationTemperatureChange;
+                        targetFrostCondensation.TemperatureChange = overrideProjectile.FrostCondensationTemperatureChange;
+                    if (overrideProjectile.FrostCondensationBonusColdDamage != null)
+                        targetFrostCondensation.IceDamage = overrideProjectile.FrostCondensationBonusColdDamage;
+                }
             }
             return target;
         }
@@ -63,8 +66,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                 )
                 .ThrowIfInvalid("Could not find accesses to MagazineAmmoLoader.ProjectileObject")
                 .Repeat(cm => {
-                    cm.RemoveInstruction();
-                    cm.InsertAndAdvance(CodeInstruction.Call(() => GetProjectileObject(default)));
+                    cm.SetInstructionAndAdvance(CodeInstruction.Call(() => GetProjectileObject(default)));
                 });
             instructions = codeMatcher.Instructions();
             

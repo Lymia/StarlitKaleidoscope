@@ -3,10 +3,12 @@
     <!-- Frost Condensation -->
     <ability Command="StarlitKaleidoscope_FrostCondensation">
         <description>
-            <p>You may load frost slugs and frost bullets into weapons when you reload them. They deal cold damage, and chill enemies they hit. This cannot freeze enemies.</p>
+            <p>You may load frost slugs and frost bullets into weapons when you reload them. They deal extra cold damage, and chill enemies they hit. This cannot freeze enemies.</p>
             <br/>
             <statline Name="PenetrationBonus" DisplayName="Bonus penetration" />
-            <statline Name="DamageBonus" DisplayName="Bonus damage" />
+            <statline Name="SlugColdDamage" DisplayName="Slug bonus damage" />
+            <statline Name="ArrowBaseDamage" DisplayName="Arrow base damage" />
+            <statline Name="ArrowColdDamage" DisplayName="Arrow bonus damage" />
             <statline Name="TemperatureChange" DisplayName="Temperature reduction" />
         </description>
         <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_off.png" Foreground="b" Detail="C" />

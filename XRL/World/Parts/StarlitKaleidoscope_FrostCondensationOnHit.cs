@@ -1,27 +1,23 @@
 ﻿using System;
+using UnityEngine.Serialization;
 
 namespace XRL.World.Parts {
     [Serializable]
     public class StarlitKaleidoscope_FrostCondensationOnHit : IPart {
-        public string Amount = null;
+        [FormerlySerializedAs("Amount")]
+        public string TemperatureChange = null;
+
+        public string IceDamage = null;
 
         public StarlitKaleidoscope_FrostCondensationOnHit() { }
 
         public override bool WantEvent(int ID, int cascade) {
-            return base.WantEvent(ID, cascade) || ID == PooledEvent<BeforeMeleeAttackEvent>.ID ||
-                   ID == PooledEvent<GetItemElementsEvent>.ID || ID == GetShortDescriptionEvent.ID;
+            return base.WantEvent(ID, cascade) || ID == PooledEvent<BeforeMeleeAttackEvent>.ID;
         }
 
         public override bool HandleEvent(BeforeMeleeAttackEvent E) {
             if (E.Weapon == this.ParentObject) {
                 PlayWorldSound("Sounds/Enhancements/sfx_enhancement_cold", Combat: true);
-            }
-            return base.HandleEvent(E);
-        }
-
-        public override bool HandleEvent(GetItemElementsEvent E) {
-            if (Amount != null && E.IsRelevantObject(this.ParentObject)) {
-                E.Add("ice", 2);
             }
             return base.HandleEvent(E);
         }
@@ -56,14 +52,20 @@ namespace XRL.World.Parts {
         }
 
         public override bool FireEvent(Event E) {
-            if (Amount != null && (E.ID == "WeaponHit" || E.ID == "WeaponDealDamage" || E.ID == "ProjectileHit")) {
+            if (TemperatureChange != null && (E.ID == "WeaponHit" || E.ID == "WeaponDealDamage" || E.ID == "ProjectileHit")) {
+                var source = E.GetGameObjectParameter("Attacker");
                 var target = E.GetGameObjectParameter("Defender");
                 if (target != null) {
-                    var rawAmount = Amount.RollCached();
+                    // apply temperature change
+                    var rawAmount = TemperatureChange.RollCached();
                     if (rawAmount >= 0) return base.FireEvent(E);
                     var currentTemperature = target.Physics.Temperature;
                     var amount = GetFinalTemperature(target.Physics, currentTemperature, -rawAmount) - currentTemperature;
                     target.TemperatureChange(amount, E.GetGameObjectParameter("Attacker"), Phase: ParentObject.GetPhase());
+                    
+                    // apply bonus frost damage
+                    if (IceDamage != null && target.PhaseMatches(ParentObject))
+                        target.TakeDamage(IceDamage.RollCached(), "from %t frost!", "Cold", Attacker: source);
                 }
             }
             return base.FireEvent(E);

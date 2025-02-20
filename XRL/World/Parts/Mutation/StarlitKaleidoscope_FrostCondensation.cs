@@ -18,22 +18,44 @@ namespace XRL.World.Parts.Mutation {
 
         public override string GetDescription() => "You gather frost from the air and condense it into projectiles.";
         
-        public int ProjectilePenetrationBonus(int Level) => Level / 4;
-        public int ProjectileDamageBonus(int Level) => 1 + (Level + 1) / 2;
-        public string ProjectileTemperatureChange(int Level) => $"-{Level}d6";
+        public int ProjectilePenetrationBonus(int Level) => Level / 6;
+        public string ArrowBaseDamage(int Level) => Level switch {
+            1 or 2 => "1d4",
+            3 or 4 => "1d3+1",
+            _ => $"1d4+{(Level-1)/2-1}",
+        };
+        public string SlugColdDamage(int Level) => Level switch {
+            1 => "1d2",
+            2 => "1d3",
+            3 => "1d4",
+            4 => "1d5",
+            _ => $"{(Level-3)/2}d3{(Level % 2 == 0 ? "+1" : "")}",
+        };
+        public string ArrowColdDamage(int Level) => Level switch {
+            1 => "1d4",
+            2 => "1d5",
+            3 => "1d6",
+            4 => "1d7",
+            _ => $"{(Level-3)/2}d5{(Level % 2 == 0 ? "+1" : "")}",
+        };
+        public string ProjectileTemperatureChange(int Level) => $"-{Level}d5";
         
         public override string GetLevelText(int Level) {
             return "You may load frost slugs and frost bullets into weapons when you reload them. " +
-                   "They deal cold damage, and chill enemies they hit. This cannot freeze enemies.\n" +
+                   "They deal extra cold damage, and chill enemies they hit. This cannot freeze enemies.\n" +
                    "\n" +
                    "Bonus penetration: {{rules|+" + ProjectilePenetrationBonus(Level) + "}}\n" +
-                   "Bonus damage: {{rules|+" + ProjectileDamageBonus(Level) + "}}\n" +
+                   "Slug bonus damage: {{rules|" + SlugColdDamage(Level) + "}}\n" +
+                   "Arrow base damage: {{rules|" + ArrowBaseDamage(Level) + "}}\n" +
+                   "Arrow bonus damage: {{rules|" + ArrowColdDamage(Level) + "}}\n" +
                    "Temperature reduction: {{rules|" + ProjectileTemperatureChange(Level) + "}} degrees\n";
         }
         
         public override void CollectStats(Templates.StatCollector stats, int Level) {
-            stats.Set("PenetrationBonus", ProjectilePenetrationBonus(Level), !stats.mode.Contains("ability"));
-            stats.Set("DamageBonus", ProjectileDamageBonus(Level), !stats.mode.Contains("ability"));
+            stats.Set("PenetrationBonus", "+" + ProjectilePenetrationBonus(Level), !stats.mode.Contains("ability"));
+            stats.Set("SlugColdDamage", SlugColdDamage(Level), !stats.mode.Contains("ability"));
+            stats.Set("ArrowBaseDamage", ArrowBaseDamage(Level), !stats.mode.Contains("ability"));
+            stats.Set("ArrowColdDamage", ArrowColdDamage(Level), !stats.mode.Contains("ability"));
             stats.Set("TemperatureChange", $"{ProjectileTemperatureChange(Level)} degrees", !stats.mode.Contains("ability"));
         }
 
@@ -52,12 +74,11 @@ namespace XRL.World.Parts.Mutation {
         bool checkCanLoadAmmo(GameObject Weapon, out MagazineAmmoLoader loader) {
             if (
                 Weapon.TryGetPart<MagazineAmmoLoader>(out var ammoLoader) && 
-                ammoLoader.AmmoPart is "AmmoSlug" or "AmmoArrow"
+                ammoLoader.AmmoPart is "AmmoSlug" or "AmmoArrow" &&
+                IsMyActivatedAbilityToggledOn(FrostCondensationActivatedAbilityID)
             ) {
-                if (IsMyActivatedAbilityToggledOn(FrostCondensationActivatedAbilityID)) {
-                    loader = ammoLoader;
-                    return true;
-                }
+                loader = ammoLoader;
+                return true;
             }
             loader = null;
             return false;
@@ -65,7 +86,7 @@ namespace XRL.World.Parts.Mutation {
 
         void reloadWeapon(CommandReloadEvent E, GameObject Weapon) {
             if (checkCanLoadAmmo(Weapon, out var ammoLoader)) {
-                bool isSlug = ammoLoader.AmmoPart == "AmmoSlug";
+                var isSlug = ammoLoader.AmmoPart == "AmmoSlug";
 
                 E.CheckedForReload.Add(ammoLoader);
                 ammoLoader.Unload(E.Actor);
@@ -79,8 +100,7 @@ namespace XRL.World.Parts.Mutation {
 
                 // inherit base weapon stats, if possible
                 overrideStats.BasePenetration = isSlug ? 3 : 0;
-                overrideStats.BaseDamage = isSlug ? "1d4" : "1d6";
-                overrideStats.Attributes = "Cold ,Cold"; // hack to deal with some parsing problems downstream
+                overrideStats.BaseDamage = isSlug ? "1d4" : ArrowBaseDamage(Level);
                 if (ammoLoader.ProjectileObject != null) {
                     var defaultProjectile = GameObject.Create(ammoLoader.ProjectileObject, Context: "Projectile");
                     if (defaultProjectile.TryGetPart<Projectile>(out var projectilePart)) {
@@ -93,9 +113,8 @@ namespace XRL.World.Parts.Mutation {
 
                 // adjust based on mutation level
                 overrideStats.BasePenetration += ProjectilePenetrationBonus(Level);
-                var damageBonus = ProjectileDamageBonus(Level);
-                overrideStats.BaseDamage = DieRoll.AdjustResult(overrideStats.BaseDamage, damageBonus);
                 overrideStats.FrostCondensationTemperatureChange = ProjectileTemperatureChange(Level);
+                overrideStats.FrostCondensationBonusColdDamage = isSlug ? SlugColdDamage(Level) : ArrowColdDamage(Level);
 
                 // load the ammo into the weapon
                 ammoLoader.Load(E.Actor, ammo, E.FromDialog);
