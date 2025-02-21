@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<objects>
+    <!-- Extra creatures for Burgeoning -->
+    <object Name="StarlitKaliedoscope_Thorny Dandy" Inherits="Plant Turret">
+        <part Name="Render" DisplayName="thorny dandy" RenderString="225" Tile="SLK_Creatures/thorny_dandy.png"
+              ColorString="&amp;G" TileColor="&amp;G" DetailColor="y"/>
+        <part Name="Description"
+              Short="Needle-tipped seeds converge into a gossamer corona, warding away any that dare approach."/>
+        <part Name="Body" Anatomy="Flower"/>
+        <part Name="Brain" MaxMissileRange="12" PointBlankRange="true" Hostile="true" Factions="Flowers-100"/>
+        <stat Name="Level" Value="15"/>
+        <stat Name="Hitpoints" Value="22"/>
+        <stat Name="AV" Value="3"/>
+        <tag Name="Role" Value="Skirmisher"/>
+        <inventoryobject Blueprint="StarlitKaliedoscope_Needle Corona"/>
+        <tag Name="Species" Value="flower"/>
+    </object>
+    <object Name="StarlitKaliedoscope_Needle Corona" Inherits="BaseMagazineRifle">
+        <part Name="Render" DisplayName="needle corona" Tile="Items/sw_voider_gland.bmp" ColorString="&amp;g"
+              TileColor="&amp;y" DetailColor="G"/>
+        <part Name="Physics" UsesTwoSlots="true"/>
+        <part Name="Commerce" Value="25"/>
+        <part Name="MissileWeapon" Skill="Rifle" AmmoChar="&amp;Y&#15;" ShotsPerAction="1" AmmoPerAction="1"
+              ShotsPerAnimation="1" WeaponAccuracy="8"/>
+        <part Name="BioAmmoLoader" MaxCapacity="20" Available="20" TurnsToGenerate="4"
+              ProjectileObject="StarlitKaliedoscope_ProjectileNeedle" ConsumesLiquid="sap" LiquidMustBePure="false"
+              LiquidConsumptionChanceOneIn="25"/>
+        <part Name="LiquidVolume" MaxVolume="16" StartVolume="16" InitialLiquid="sap-1000"/>
+        <part Name="LeakWhenBroken"/>
+        <part Name="LiquidProducer" Liquid="sap" Rate="50" FillSelfOnly="true" IsTechScannable="false"
+              WorksOnEquipper="true" WorksOnSelf="false" RequiresBodyPartCategory="Plant"/>
+        <part Name="Description" Short="Countless needles are delicately arranged into a fragile sphere."/>
+        <part Name="Examiner" Unknown="UnknownStrangePlant" Complexity="4" Difficulty="2"/>
+        <tag Name="Tier" Value="2"/>
+        <tag Name="MissileFireSound" Value="Sounds/Missile/Fires/Rifles/sfx_missile_thistlePitcher_fire"/>
+        <tag Name="ReloadSound" Value="Sounds/Missile/Reloads/sfx_missile_handVacuum_reload"/>
+        <tag Name="LivePlant"/>
+        <tag Name="ExcludeFromDynamicEncounters" Value="*noinherit"/>
+    </object>
+    <object Name="StarlitKaliedoscope_ProjectileNeedle" Inherits="TemporaryProjectile">
+        <part Name="Render" DisplayName="{{Y|needle}}" ColorString="&amp;Y"/>
+        <part Name="Projectile" BasePenetration="5" BaseDamage="1d3+2" ColorString="&amp;y" PassByVerb="whiz"/>
+        <tag Name="ProjectileVFX" Value="MissileWeaponsEffects/lead_slug" />
+        <tag Name="ProjectileVFXConfiguration" Value="duration::0.25;;slugColor::#FFFFFF;;trailColor::#FFFFFF" />
+    </object>
+</objects>

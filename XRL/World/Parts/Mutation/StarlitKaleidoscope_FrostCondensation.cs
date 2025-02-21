@@ -29,14 +29,13 @@ namespace XRL.World.Parts.Mutation {
             2 => "1d3",
             3 => "1d4",
             4 => "1d5",
-            _ => $"{(Level-3)/2}d3{(Level % 2 == 0 ? "+1" : "")}",
+            _ => $"{(Level-1)/2}d3{(Level % 2 == 0 ? "+1" : "")}",
         };
         public string ArrowColdDamage(int Level) => Level switch {
-            1 => "1d4",
+            1 => "1d3",
             2 => "1d5",
-            3 => "1d6",
-            4 => "1d7",
-            _ => $"{(Level-3)/2}d5{(Level % 2 == 0 ? "+1" : "")}",
+            3 => "1d7",
+            _ => $"{Level/2}d5{(Level % 2 == 0 ? "+1" : "")}",
         };
         public string ProjectileTemperatureChange(int Level) => $"-{Level}d5";
         

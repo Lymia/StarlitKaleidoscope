@@ -1,14 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <populations>
-    <!-- Make Burgeoning less likely to result in you dying.-->
-    <population Name="PlantSummoning1">
+    <!-- Make Burgeoning less likely to result in you dying, and more consistent in how it works between levels. -->
+    <population Name="PlantSummoning1" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
-                <object Weight="10" Blueprint="Qudzu" />
-                <object Weight="10" Blueprint="Dreadroot" />
-                <object Weight="10" Blueprint="Jilted Lover" />
-                <object Weight="10" Blueprint="Young Ivory" />
+                <!-- Active -->
                 <object Weight="10" Blueprint="Seed-Spitting Vine" />
+
+                <!-- Passive -->
+                <object Weight="10" Blueprint="Qudzu" />
+                <object Weight="10" Blueprint="Jilted Lover" />
+
+                <!-- Traps -->
+                <object Weight="10" Blueprint="Dreadroot" />
+                <object Weight="10" Blueprint="Young Ivory" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
                 <table Weight="10" Name="PlantSummoning_Generics1" />
@@ -16,14 +21,20 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning2">
+    <population Name="PlantSummoning2" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="5" Blueprint="Seed-Spitting Vine" />
                 <object Weight="10" Blueprint="Thirst Thistle" />
-                <object Weight="10" Blueprint="Prickler" />
+
+                <!-- Passive -->
+                <object Weight="5" Blueprint="Qudzu" />
                 <object Weight="5" Blueprint="Jilted Lover" />
+
+                <!-- Traps -->
+                <object Weight="10" Blueprint="Prickler" />
                 <object Weight="5" Blueprint="Young Ivory" />
-                <object Weight="10" Blueprint="Seed-Spitting Vine" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
                 <table Weight="20" Name="PlantSummoning_Generics2" />
@@ -32,12 +43,18 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning3">
+    <population Name="PlantSummoning3" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="5" Blueprint="Thirst Thistle" />
+                <object Weight="10" Blueprint="StarlitKaliedoscope_Thorny Dandy" />
+
+                <!-- Passive -->
+                
+                <!-- Traps -->
                 <object Weight="10" Blueprint="Yonderbrush" />
                 <object Weight="10" Blueprint="Aloe Volta" />
-                <object Weight="10" Blueprint="Thirst Thistle" />
                 <object Weight="5" Blueprint="Prickler" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
@@ -47,12 +64,18 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning4">
+    <population Name="PlantSummoning4" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="10" Blueprint="StarlitKaliedoscope_Thorny Dandy" />
+
+                <!-- Passive -->
+                <object Weight="10" Blueprint="Livid Creeper" />
+
+                <!-- Traps -->
                 <object Weight="5" Blueprint="Aloe Porta" />
                 <object Weight="5" Blueprint="Yonderbrush" />
-                <object Weight="10" Blueprint="Livid Creeper" />
                 <object Weight="10" Blueprint="Lurking Beth" />
                 <object Weight="10" Blueprint="Holographic Ivory" />
             </group>
@@ -63,17 +86,23 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning5">
+    <population Name="PlantSummoning5" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
-                <object Weight="5" Blueprint="Aloe Porta" />
-                <object Weight="5" Blueprint="Yonderbrush" />
-                <object Weight="2" Blueprint="Aloe Fugues" />
-                <table Weight="1" Name="FungusPuffers" />
-                <object Weight="5" Blueprint="Lagroot" />
+                <!-- Active -->
+                <object Weight="5" Blueprint="StarlitKaliedoscope_Thorny Dandy" />
+
+                <!-- Passive -->
                 <object Weight="10" Blueprint="Livid Creeper" />
                 <object Weight="10" Blueprint="Red Death Dacca" />
                 <object Weight="10" Blueprint="Irritable Palm" />
+
+                <!-- Traps -->
+                <object Weight="5" Blueprint="Aloe Porta" />
+                <object Weight="5" Blueprint="Yonderbrush" />
+                <object Weight="2" Blueprint="Aloe Fugues" />
+                <object Weight="5" Blueprint="Lagroot" />
+                <table Weight="1" Name="FungusPuffers" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
                 <table Weight="20" Name="PlantSummoning_Generics5" />
@@ -82,19 +111,23 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning6">
+    <population Name="PlantSummoning6" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="2" Blueprint="Gorged Growth" />
+
+                <!-- Passive -->
+                <object Weight="10" Blueprint="Red Death Dacca" />
+                <object Weight="10" Blueprint="Irritable Palm" />
+
+                <!-- Traps -->
                 <object Weight="5" Blueprint="Aloe Porta" />
                 <object Weight="5" Blueprint="Yonderbrush" />
                 <object Weight="2" Blueprint="Aloe Fugues" />
-                <object Weight="2" Blueprint="Gorged Growth" />
-                <table Weight="1" Name="FungusPuffers" />
-                <object Weight="5" Blueprint="Lagroot" />
                 <object Weight="10" Blueprint="Holographic Beth" />
-                <object Weight="1" Blueprint="Vantabud" />
-                <object Weight="10" Blueprint="Red Death Dacca" />
-                <object Weight="10" Blueprint="Irritable Palm" />
+                <object Weight="5" Blueprint="Lagroot" />
+                <table Weight="1" Name="FungusPuffers" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
                 <table Weight="20" Name="PlantSummoning_Generics6" />
@@ -103,18 +136,22 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning7">
+    <population Name="PlantSummoning7" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="2" Blueprint="Gorged Growth" />
+
+                <!-- Passive -->
+                <object Weight="10" Blueprint="Red Death Dacca" />
+                <object Weight="10" Blueprint="Irritable Palm" />
+
+                <!-- Traps -->
                 <object Weight="5" Blueprint="Aloe Porta" />
                 <object Weight="4" Blueprint="Yonderbrush" />
                 <object Weight="2" Blueprint="Aloe Fugues" />
-                <object Weight="2" Blueprint="Gorged Growth" />
                 <table Weight="1" Name="FungusPuffers" />
                 <object Weight="5" Blueprint="Elder Lagroot" />
-                <object Weight="1" Blueprint="Vantabud" />
-                <object Weight="10" Blueprint="Red Death Dacca" />
-                <object Weight="10" Blueprint="Irritable Palm" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
                 <table Weight="20" Name="PlantSummoning_Generics7" />
@@ -123,19 +160,23 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning8">
+    <population Name="PlantSummoning8" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="75" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="2" Blueprint="Gorged Growth" />
+                <object Weight="5" Blueprint="Tongue Tyrant" />
+
+                <!-- Passive -->
+                <object Weight="9" Blueprint="Red Death Dacca" />
+                <object Weight="9" Blueprint="Irritable Palm" />
+
+                <!-- Traps -->
                 <object Weight="5" Blueprint="Aloe Porta" />
                 <object Weight="4" Blueprint="Yonderbrush" />
                 <object Weight="3" Blueprint="Aloe Fugues" />
-                <object Weight="2" Blueprint="Gorged Growth" />
                 <table Weight="1" Name="FungusPuffers" />
                 <object Weight="5" Blueprint="Elder Lagroot" />
-                <object Weight="1" Blueprint="Vantabloom" />
-                <object Weight="9" Blueprint="Red Death Dacca" />
-                <object Weight="9" Blueprint="Irritable Palm" />
-                <object Weight="5" Blueprint="Tongue Tyrant" />
             </group>
             <group Weight="25" Name="Generics" Style="pickone">
                 <table Weight="20" Name="PlantSummoning_Generics8Plus" />
@@ -144,20 +185,26 @@
             </group>
         </group>
     </population>
-    <population Name="PlantSummoning9">
+    <population Name="PlantSummoning9" Load="Replace">
         <group Name="Summons" Style="pickone">
             <group Weight="50" Name="PlantCreature" Style="pickone">
+                <!-- Active -->
+                <object Weight="2" Blueprint="Gorged Growth" />
+                <object Weight="10" Blueprint="Tongue Tyrant" />
+                <object Weight="1" Blueprint="Dreamcrungle" />
+
+                <!-- Passive -->
+                <object Weight="8" Blueprint="Red Death Dacca" />
+                <object Weight="8" Blueprint="Irritable Palm" />
+
+                <!-- Traps -->
                 <object Weight="5" Blueprint="Aloe Porta" />
                 <object Weight="4" Blueprint="Yonderbrush" />
                 <object Weight="3" Blueprint="Aloe Fugues" />
-                <object Weight="2" Blueprint="Gorged Growth" />
                 <table Weight="1" Name="FungusPuffers" />
                 <object Weight="5" Blueprint="Elder Lagroot" />
-                <object Weight="1" Blueprint="Vantabloom" />
-                <object Weight="8" Blueprint="Red Death Dacca" />
-                <object Weight="8" Blueprint="Irritable Palm" />
-                <object Weight="10" Blueprint="Tongue Tyrant" />
-                <object Weight="1" Blueprint="Dreamcrungle" />
+
+                <!-- Misc -->
                 <table Weight="10" Name="PlantSummoning_Generics8Plus" />
                 <table Weight="10" Name="PlantSummoning8" />
             </group>
