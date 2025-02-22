@@ -11,7 +11,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace StarlitKaleidoscope.Utils
+// @formatter:off
+namespace StarlitKaleidoscope.ThirdParty
 {
     /// <summary>
     ///  Represents a min priority queue.

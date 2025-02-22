@@ -1,6 +1,5 @@
 ﻿using System;
 using XRL.Messages;
-using XRL.Rules;
 using XRL.UI;
 
 namespace XRL.World.Parts.Mutation {
