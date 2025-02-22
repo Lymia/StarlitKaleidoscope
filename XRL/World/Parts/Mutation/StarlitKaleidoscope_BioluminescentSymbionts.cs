@@ -14,13 +14,12 @@ namespace XRL.World.Parts.Mutation {
         public override string GetDescription() => "You are bound to countless bioluminescent insects and see through their eyes.";
 
         public float LightRange(int Level) => Level switch {
-            1 => 3.0f,
-            2 => 4.0f,
-            3 => 5.0f,
-            4 => 6.0f,
-            5 => 7.0f,
-            6 => 8.0f,
-            _ => 8.0f + (Level - 6) / 2.0f,
+            1 => 4.0f,
+            2 => 5.0f,
+            3 => 6.0f,
+            4 => 7.0f,
+            5 => 8.0f,
+            _ => 8.0f + (Level - 5) / 2.0f,
         };
         
         public override string GetLevelText(int Level) {
