@@ -1,8 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace StarlitKaleidoscope.Utils
@@ -16,8 +22,6 @@ namespace StarlitKaleidoscope.Utils
     ///  Implements an array-backed quaternary min-heap. Each element is enqueued with an associated priority
     ///  that determines the dequeue order: elements with the lowest priority get dequeued first.
     /// </remarks>
-    [DebuggerDisplay("Count = {Count}")]
-    [DebuggerTypeProxy(typeof(PriorityQueueDebugView<,>))]
     public class PriorityQueue<TElement, TPriority>
     {
         /// <summary>
@@ -111,9 +115,8 @@ namespace StarlitKaleidoscope.Utils
         /// <exception cref="ArgumentOutOfRangeException">
         ///  The specified <paramref name="initialCapacity"/> was negative.
         /// </exception>
-        public PriorityQueue(int initialCapacity, IComparer<TPriority>? comparer)
-        {
-            ArgumentOutOfRangeException.ThrowIfNegative(initialCapacity);
+        public PriorityQueue(int initialCapacity, IComparer<TPriority>? comparer) {
+            if (initialCapacity < 0) throw new ArgumentOutOfRangeException(nameof(initialCapacity));
 
             _nodes = new (TElement, TPriority)[initialCapacity];
             _comparer = InitializeComparer(comparer);
@@ -135,7 +138,7 @@ namespace StarlitKaleidoscope.Utils
             : this(items, comparer: null)
         {
         }
-
+        
         /// <summary>
         ///  Initializes a new instance of the <see cref="PriorityQueue{TElement, TPriority}"/> class
         ///  that is populated with the specified elements and priorities,
@@ -155,9 +158,10 @@ namespace StarlitKaleidoscope.Utils
         /// </remarks>
         public PriorityQueue(IEnumerable<(TElement Element, TPriority Priority)> items, IComparer<TPriority>? comparer)
         {
-            ArgumentNullException.ThrowIfNull(items);
+            if (items == null) throw new ArgumentNullException(nameof(items));
 
-            _nodes = EnumerableHelpers.ToArray(items, out _size);
+            _nodes = items.ToArray();
+            _size = _nodes.Length;
             _comparer = InitializeComparer(comparer);
 
             if (_size > 1)
@@ -230,7 +234,7 @@ namespace StarlitKaleidoscope.Utils
         {
             if (_size == 0)
             {
-                throw new InvalidOperationException(SR.InvalidOperation_EmptyQueue);
+                throw new InvalidOperationException("empty queue");
             }
 
             return _nodes[0].Element;
@@ -245,7 +249,7 @@ namespace StarlitKaleidoscope.Utils
         {
             if (_size == 0)
             {
-                throw new InvalidOperationException(SR.InvalidOperation_EmptyQueue);
+                throw new InvalidOperationException("empty queue");
             }
 
             TElement element = _nodes[0].Element;
@@ -269,7 +273,7 @@ namespace StarlitKaleidoscope.Utils
         {
             if (_size == 0)
             {
-                throw new InvalidOperationException(SR.InvalidOperation_EmptyQueue);
+                throw new InvalidOperationException("empty queue");
             }
 
             (TElement Element, TPriority Priority) root = _nodes[0];
@@ -401,7 +405,7 @@ namespace StarlitKaleidoscope.Utils
         /// </exception>
         public void EnqueueRange(IEnumerable<(TElement Element, TPriority Priority)> items)
         {
-            ArgumentNullException.ThrowIfNull(items);
+            if (items == null) throw new ArgumentNullException(nameof(items));
 
             int count = 0;
             var collection = items as ICollection<(TElement Element, TPriority Priority)>;
@@ -464,7 +468,7 @@ namespace StarlitKaleidoscope.Utils
         /// </exception>
         public void EnqueueRange(IEnumerable<TElement> elements, TPriority priority)
         {
-            ArgumentNullException.ThrowIfNull(elements);
+            if (elements == null) throw new ArgumentNullException(nameof(elements));
 
             int count;
             if (elements is ICollection<TElement> collection &&
@@ -594,7 +598,7 @@ namespace StarlitKaleidoscope.Utils
         /// <returns>The current capacity of the <see cref="PriorityQueue{TElement, TPriority}"/>.</returns>
         public int EnsureCapacity(int capacity)
         {
-            ArgumentOutOfRangeException.ThrowIfNegative(capacity);
+            if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
 
             if (_nodes.Length < capacity)
             {
@@ -637,7 +641,7 @@ namespace StarlitKaleidoscope.Utils
 
             // Allow the queue to grow to maximum possible capacity (~2G elements) before encountering overflow.
             // Note that this check works even when _nodes.Length overflowed thanks to the (uint) cast
-            if ((uint)newcapacity > Array.MaxLength) newcapacity = Array.MaxLength;
+            if ((uint) newcapacity > int.MaxValue) newcapacity = int.MaxValue;
 
             // Ensure minimum growth is respected.
             newcapacity = Math.Max(newcapacity, _nodes.Length + MinimumGrow);
@@ -755,7 +759,7 @@ namespace StarlitKaleidoscope.Utils
             // Instead of swapping items all the way to the root, we will perform
             // a similar optimization as in the insertion sort.
 
-            Debug.Assert(_comparer is not null);
+            if (_comparer == null) throw new Exception("_comparer is null?");
             Debug.Assert(0 <= nodeIndex && nodeIndex < _size);
 
             IComparer<TPriority> comparer = _comparer;
@@ -837,7 +841,7 @@ namespace StarlitKaleidoscope.Utils
             // Rather, values on the affected path will be moved up, thus leaving a free spot
             // for this value to drop in. Similar optimization as in the insertion sort.
 
-            Debug.Assert(_comparer is not null);
+            if (_comparer == null) throw new Exception("_comparer is null?");
             Debug.Assert(0 <= nodeIndex && nodeIndex < _size);
 
             IComparer<TPriority> comparer = _comparer;
@@ -939,8 +943,6 @@ namespace StarlitKaleidoscope.Utils
         /// <summary>
         ///  Enumerates the contents of a <see cref="PriorityQueue{TElement, TPriority}"/>, without any ordering guarantees.
         /// </summary>
-        [DebuggerDisplay("Count = {Count}")]
-        [DebuggerTypeProxy(typeof(PriorityQueueDebugView<,>))]
         public sealed class UnorderedItemsCollection : IReadOnlyCollection<(TElement Element, TPriority Priority)>, ICollection
         {
             internal readonly PriorityQueue<TElement, TPriority> _queue;
@@ -953,26 +955,26 @@ namespace StarlitKaleidoscope.Utils
 
             void ICollection.CopyTo(Array array, int index)
             {
-                ArgumentNullException.ThrowIfNull(array);
-
+                if (array == null) throw new ArgumentNullException(nameof(array));
+                
                 if (array.Rank != 1)
                 {
-                    throw new ArgumentException(SR.Arg_RankMultiDimNotSupported, nameof(array));
+                    throw new ArgumentException("multi dim not supported", nameof(array));
                 }
 
                 if (array.GetLowerBound(0) != 0)
                 {
-                    throw new ArgumentException(SR.Arg_NonZeroLowerBound, nameof(array));
+                    throw new ArgumentException("non zero lower bound", nameof(array));
                 }
 
                 if (index < 0 || index > array.Length)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, SR.ArgumentOutOfRange_IndexMustBeLessOrEqual);
+                    throw new ArgumentOutOfRangeException(nameof(index), index, "index must be less or equal");
                 }
 
                 if (array.Length - index < _queue._size)
                 {
-                    throw new ArgumentException(SR.Argument_InvalidOffLen);
+                    throw new ArgumentException("invalid offset length");
                 }
 
                 try
@@ -981,7 +983,7 @@ namespace StarlitKaleidoscope.Utils
                 }
                 catch (ArrayTypeMismatchException)
                 {
-                    throw new ArgumentException(SR.Argument_IncompatibleArrayType, nameof(array));
+                    throw new ArgumentException("incompatible array type", nameof(array));
                 }
             }
 
@@ -1031,7 +1033,7 @@ namespace StarlitKaleidoscope.Utils
                 {
                     if (_version != _queue._version)
                     {
-                        throw new InvalidOperationException(SR.InvalidOperation_EnumFailedVersion);
+                        throw new InvalidOperationException("enum failed version");
                     }
 
                     _index = _queue._size + 1;
@@ -1049,7 +1051,7 @@ namespace StarlitKaleidoscope.Utils
                 {
                     if (_version != _queue._version)
                     {
-                        throw new InvalidOperationException(SR.InvalidOperation_EnumFailedVersion);
+                        throw new InvalidOperationException("enum failed version");
                     }
 
                     _index = 0;
@@ -1063,8 +1065,12 @@ namespace StarlitKaleidoscope.Utils
             /// <returns>An <see cref="Enumerator"/> for the <see cref="UnorderedItems"/>.</returns>
             public Enumerator GetEnumerator() => new Enumerator(_queue);
 
+            /// <summary>Gets an enumerator singleton for an empty collection.</summary>
+            static IEnumerator<T> GetEmptyEnumerator<T>() =>
+                ((IEnumerable<T>)Array.Empty<T>()).GetEnumerator();
+            
             IEnumerator<(TElement Element, TPriority Priority)> IEnumerable<(TElement Element, TPriority Priority)>.GetEnumerator() =>
-                _queue.Count == 0 ? EnumerableHelpers.GetEmptyEnumerator<(TElement Element, TPriority Priority)>() :
+                _queue.Count == 0 ? GetEmptyEnumerator<(TElement Element, TPriority Priority)>() :
                 GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<(TElement Element, TPriority Priority)>)this).GetEnumerator();
