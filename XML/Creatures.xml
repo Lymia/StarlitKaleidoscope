@@ -5,7 +5,7 @@
         <part Name="Render" DisplayName="thorny dandy" RenderString="225" Tile="SLK_Creatures/thorny_dandy.png"
               ColorString="&amp;G" TileColor="&amp;G" DetailColor="y"/>
         <part Name="Description"
-              Short="Needle-tipped seeds converge into a gossamer corona, warding away any that dare approach."/>
+              Short="A flotilla of countless seed-stings adorn a simple stem, blossoming into a gossamer corona ready to strike any interloper."/>
         <part Name="Body" Anatomy="Flower"/>
         <part Name="Brain" MaxMissileRange="12" PointBlankRange="true" Hostile="true" Factions="Flowers-100"/>
         <stat Name="Level" Value="15"/>

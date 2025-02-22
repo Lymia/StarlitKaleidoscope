@@ -11,8 +11,8 @@
             <statline Name="ArrowColdDamage" DisplayName="Arrow bonus damage" />
             <statline Name="TemperatureChange" DisplayName="Temperature reduction" />
         </description>
-        <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_off.png" Foreground="b" Detail="C" />
-        <UITile Tile="StarlitKaleidoscope/abil_frostcondensation_toggle_on.png" Foreground="B" Detail="C" State="ToggleOn" />
+        <UITile Tile="SLK_Mutations/abil_frostcondensation_toggle_off.png" Foreground="b" Detail="C" />
+        <UITile Tile="SLK_Mutations/abil_frostcondensation_toggle_on.png" Foreground="B" Detail="C" State="ToggleOn" />
     </ability>
     
     <!-- Reworked Light Manipulation. -->
