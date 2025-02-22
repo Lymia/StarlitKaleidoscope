@@ -17,28 +17,28 @@ namespace XRL.World.Parts.Mutation {
         }
 
         public override string GetDescription() => "You gather frost from the air and condense it into projectiles.";
-        
+
         public int ProjectilePenetrationBonus(int Level) => Level / 6;
         public string ArrowBaseDamage(int Level) => Level switch {
             1 or 2 => "1d4",
             3 or 4 => "1d3+1",
-            _ => $"1d4+{(Level-1)/2-1}",
+            _ => $"1d4+{(Level - 1) / 2 - 1}",
         };
         public string SlugColdDamage(int Level) => Level switch {
             1 => "1d2",
             2 => "1d3",
             3 => "1d4",
             4 => "1d5",
-            _ => $"{(Level-1)/2}d3{(Level % 2 == 0 ? "+1" : "")}",
+            _ => $"{(Level - 1) / 2}d3{(Level % 2 == 0 ? "+1" : "")}",
         };
         public string ArrowColdDamage(int Level) => Level switch {
             1 => "1d3",
             2 => "1d5",
             3 => "1d7",
-            _ => $"{Level/2}d5{(Level % 2 == 0 ? "+1" : "")}",
+            _ => $"{Level / 2}d5{(Level % 2 == 0 ? "+1" : "")}",
         };
         public string ProjectileTemperatureChange(int Level) => $"-{Level}d5";
-        
+
         public override string GetLevelText(int Level) {
             return "You may load frost slugs and frost bullets into weapons when you reload them. " +
                    "They deal extra cold damage, and chill enemies they hit. This cannot freeze enemies.\n" +
@@ -49,7 +49,7 @@ namespace XRL.World.Parts.Mutation {
                    "Arrow bonus damage: {{rules|" + ArrowColdDamage(Level) + "}}\n" +
                    "Temperature reduction: {{rules|" + ProjectileTemperatureChange(Level) + "}} degrees\n";
         }
-        
+
         public override void CollectStats(Templates.StatCollector stats, int Level) {
             stats.Set("PenetrationBonus", "+" + ProjectilePenetrationBonus(Level), !stats.mode.Contains("ability"));
             stats.Set("SlugColdDamage", SlugColdDamage(Level), !stats.mode.Contains("ability"));
@@ -62,7 +62,8 @@ namespace XRL.World.Parts.Mutation {
             return base.WantEvent(ID, cascade) ||
                    ID == CommandReloadEvent.ID ||
                    ID == CommandEvent.ID ||
-                   ID == BeforeAbilityManagerOpenEvent.ID;
+                   ID == BeforeAbilityManagerOpenEvent.ID ||
+                   ID == PooledEvent<GetItemElementsEvent>.ID;
         }
 
         public override bool HandleEvent(BeforeAbilityManagerOpenEvent E) {
@@ -70,9 +71,15 @@ namespace XRL.World.Parts.Mutation {
             return base.HandleEvent(E);
         }
 
+        public override bool HandleEvent(GetItemElementsEvent E) {
+            if (E.IsRelevantCreature(this.ParentObject))
+                E.Add("ice", this.BaseElementWeight);
+            return base.HandleEvent(E);
+        }
+
         bool checkCanLoadAmmo(GameObject Weapon, out MagazineAmmoLoader loader) {
             if (
-                Weapon.TryGetPart<MagazineAmmoLoader>(out var ammoLoader) && 
+                Weapon.TryGetPart<MagazineAmmoLoader>(out var ammoLoader) &&
                 ammoLoader.AmmoPart is "AmmoSlug" or "AmmoArrow" &&
                 IsMyActivatedAbilityToggledOn(FrostCondensationActivatedAbilityID)
             ) {

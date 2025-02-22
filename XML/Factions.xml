@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<factions>
+    <faction Name="Insects" Load="Merge">
+        <partreputation About="StarlitKaleidoscope_BioluminescentSymbionts" Value="400"/>
+    </faction>
+</factions>

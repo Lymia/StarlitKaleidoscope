@@ -1,4 +1,5 @@
-/Mods.csproj
+/*.csproj
 /obj
 /.idea
 /*.user
+/bin

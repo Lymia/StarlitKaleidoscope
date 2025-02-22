@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <mutations>
+    <category Name="Physical">
+        <mutation Name="Bioluminescent Symbionts" Cost="2" MaxSelected="1" Class="StarlitKaleidoscope_BioluminescentSymbionts" Exclusions="" BearerDescription="swarm-bearers" BiomeAdjective="luminous" Tile="SLK_Mutations/biolum.png" />
+    </category>
     <category Name="Mental">
-        <mutation Name="Frost Condensation" Cost="4" MaxSelected="1" Class="StarlitKaleidoscope_FrostCondensation" Exclusions="" BearerDescription="cryomancers" BiomeAdjective="frost meadow" Tile="StarlitKaleidoscope/frostcondensation.png" />
+        <mutation Name="Frost Condensation" Cost="4" MaxSelected="1" Class="StarlitKaleidoscope_FrostCondensation" Exclusions="" BearerDescription="cryomancers" BiomeAdjective="frost meadow" Tile="SLK_Mutations/frostcondensation.png" />
     </category>
 </mutations>
