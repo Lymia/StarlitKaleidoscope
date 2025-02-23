@@ -32,8 +32,8 @@ namespace StarlitKaleidoscope.Mutations {
 
         const float CoordScale = 8.0f;
         const float TimeScale = 2.0f;
-        const float BaseNoiseMagnitude = 3f;
-        const float RadiusNoiseMagnitudeFactor = 0.2f;
+        const float BaseNoiseMagnitude = 2.5f;
+        const float RadiusNoiseMagnitudeFactor = 0.15f;
         const float FSqrt2 = 1.41421356237f;
 
         public class CacheContext {

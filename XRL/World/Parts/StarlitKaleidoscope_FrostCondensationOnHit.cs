@@ -9,8 +9,6 @@ namespace XRL.World.Parts {
 
         public string IceDamage = null;
 
-        public StarlitKaleidoscope_FrostCondensationOnHit() { }
-
         public override bool WantEvent(int ID, int cascade) {
             return base.WantEvent(ID, cascade) || ID == PooledEvent<BeforeMeleeAttackEvent>.ID;
         }
