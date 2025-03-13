@@ -3,4 +3,7 @@
     <faction Name="Insects" Load="Merge">
         <partreputation About="StarlitKaleidoscope_BioluminescentSymbionts" Value="400"/>
     </faction>
+    <faction Name="Entropic" Load="Merge">
+        <partreputation About="StarlitKaleidoscope_StaticBurst" Value="200"/>
+    </faction>
 </factions>

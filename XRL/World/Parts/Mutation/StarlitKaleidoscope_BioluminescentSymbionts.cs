@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using StarlitKaleidoscope.Mutations;
-using UnityEngine.Serialization;
-using XRL.Messages;
 
 namespace XRL.World.Parts.Mutation {
     [Serializable]
@@ -47,7 +44,8 @@ namespace XRL.World.Parts.Mutation {
         void updateLightCells(Cell basisCell) {
             if (NoiseSeed == 0) reseed();
             
-            if (ctx == null) ctx = new();
+            if (ctx == null)
+                ctx = new();
             ctx.SetupNoise(basisCell.ParentZone, NoiseSeed);
 
             var zone = basisCell.ParentZone;

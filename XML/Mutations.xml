@@ -5,5 +5,6 @@
     </category>
     <category Name="Mental">
         <mutation Name="Frost Condensation" Cost="4" MaxSelected="1" Class="StarlitKaleidoscope_FrostCondensation" Exclusions="" BearerDescription="cryomancers" BiomeAdjective="frost meadow" Tile="SLK_Mutations/frostcondensation.png" />
+        <mutation Name="Static Rupture" Cost="5" MaxSelected="1" Class="StarlitKaleidoscope_StaticBurst" Exclusions="" BearerDescription="corrupted" BiomeAdjective="corrupted" Tile="SLK_Mutations/frostcondensation.png" />
     </category>
 </mutations>

@@ -33,4 +33,22 @@
         <tag Name="ProjectileVFXConfiguration" Value="duration::0.25;;shaftColor::#40abff;;headColor::#40abff;;trailColor::#40abff"/>
         <part Name="StarlitKaleidoscope_FrostCondensationOnHit"/>
     </object>
+
+    <object Name="StarlitKaleidoscope_AmalgamatedDross" Inherits="Item">
+        <part Name="Render" Tile="SLK_StaticBurstItems/bits0.png" DetailColor="C" ColorString="&amp;B" DisplayName="amalgamated dross" />
+        <part Name="Physics" Weight="2" Category="Scrap" />
+        <part Name="Description" Short="Experience and recollection diffuse into a torrent of warm static, leaving behind a fragmented amalgam of half-remembered machinery and landscapes." />
+        <part Name="Metal" />
+        <part Name="TinkerItem" Bits="0" CanDisassemble="true" CanBuild="false" />
+        <part Name="Commerce" Value="5" />
+        <tag Name="Scrap" />
+        <tag Name="BaseObject" Value="*noinherit" />
+        <tag Name="EquipSound" Value="sfx_equip_material_generic_metal" />
+        <stag Name="Scrap" />
+        <part Name="NoBreak" />
+        <tag Name="Breakable" Value="*delete"/>
+        <part Name="NoRust" />
+        <!-- <part Name="ItemElements" Elements="void::1" /> TODO -->
+        <tag Name="NoSparkingQuest" />
+    </object>
 </objects>

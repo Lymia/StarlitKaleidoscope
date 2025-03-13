@@ -15,7 +15,7 @@ namespace StarlitKaleidoscope.Effects {
             Duration = 10;
         }
 
-        public Glowing(int glowRadius, int dvPenalty, int duration) {
+        public Glowing(int glowRadius, int dvPenalty, int duration) : this() {
             GlowRadius = glowRadius;
             DvPenalty = dvPenalty;
             Duration = duration;
