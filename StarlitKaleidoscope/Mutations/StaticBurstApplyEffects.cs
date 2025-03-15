@@ -1,81 +1,106 @@
 ﻿using System;
-using System.Linq;
+using StarlitKaleidoscope.Effects;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Effects;
+using XRL.World.Parts.Mutation;
 
 namespace StarlitKaleidoscope.Mutations {
-    public class StaticBurstApplyEffects {
-        readonly struct EffectKind {
-            public readonly Type effectClass;
-            public readonly int weight;
+    public static class StaticBurstApplyEffects {
+        interface IEffectFactory : IWeight {
+            Effect createEffect(int tier);
+        }
 
-            public EffectKind(Type effectClass, int weight) {
-                if (!typeof(Effect).IsAssignableFrom(effectClass))
-                    throw new ArgumentException($"effectClass ({effectClass}) must derive from Effect");
-                if (!typeof(ITierInitialized).IsAssignableFrom(effectClass))
-                    throw new ArgumentException($"effectClass ({effectClass}) must derive from ITierInitialized");
-                
-                this.effectClass = effectClass;
-                this.weight = weight;
+        class EffectType<T> : IEffectFactory where T : Effect, ITierInitialized, new() {
+            readonly Action<T, int> callback;
+            public int Weight { get; }
+
+            public EffectType(int weight, Action<T, int> callback = null) {
+                Weight = weight;
+                this.callback = callback;
+            }
+
+            public Effect createEffect(int tier) {
+                var effectObject = new T();
+                effectObject.Initialize(tier);
+                callback?.Invoke(effectObject, tier);
+                return effectObject;
             }
         }
 
-        readonly static EffectKind[] effects = new[] {
-            // Damage over time effects
-            new EffectKind(typeof(Bleeding), 20),
-            new EffectKind(typeof(AshPoison), 10),
-            new EffectKind(typeof(SporeCloudPoison), 10),
-            new EffectKind(typeof(PhasePoisoned), 1),
-            new EffectKind(typeof(Poisoned), 20),
-            new EffectKind(typeof(PoisonGasPoison), 10),
-            
-            // Generic numeric debuffs 
-            new EffectKind(typeof(ShatterArmor), 20),
-            new EffectKind(typeof(ShatterMentalArmor), 20),
-            new EffectKind(typeof(Dazed), 5),
-            new EffectKind(typeof(Disoriented), 5),
-            new EffectKind(typeof(Hobbled), 3),
-            new EffectKind(typeof(Lovesick), 5),
-            new EffectKind(typeof(Shaken), 5),
-            new EffectKind(typeof(Shamed), 5),
-            new EffectKind(typeof(AxonsDeflated), 3),
-            new EffectKind(typeof(BasiliskPoison), 5),
-            
-            // Speciality debuffs
-            new EffectKind(typeof(CoatedInPlasma), 3),
-            new EffectKind(typeof(Confused), 3),
-            new EffectKind(typeof(Exhausted), 3),
-            new EffectKind(typeof(Ill), 3),
-            new EffectKind(typeof(Paralyzed), 3),
-            new EffectKind(typeof(Prone), 3),
-            new EffectKind(typeof(Stuck), 3),
-            new EffectKind(typeof(Stun), 3),
-        };
+        class CallbackEffect : IEffectFactory {
+            readonly Func<int, Effect> callback;
+            public int Weight { get; }
 
-        readonly static Tuple<EffectKind, int>[] computedEffects;
+            public CallbackEffect(Func<int, Effect> callback, int weight) {
+                this.callback = callback;
+                Weight = weight;
+            }
 
-        static StaticBurstApplyEffects() {
-            computedEffects = new Tuple<EffectKind, int>[effects.Select(x => x.weight).Sum()];
-            var i = 0;
-            foreach (var effect in effects.Select((x, i) => new Tuple<EffectKind, int>(x, i)))
-                for (var j = 0; j < effect.Item1.weight; j++)
-                    computedEffects[i++] = effect;
+            public Effect createEffect(int tier) {
+                return callback(tier);
+            }
         }
 
+        static string strDamage(int tier) {
+            return $"{tier}d2";
+        }
+
+        static int intDamage(int tier) {
+            return tier * 3 / 2 + Stat.Random(0, 1);
+        }
+
+        static int avPvPenalty(int tier) {
+            return Stat.Random(0, 2) + tier;
+        }
+
+        static int durationCap(int tier) {
+            tier -= 0;
+            return Stat.Random(10 + tier * 10, 20 + tier * 15);
+        }
+
+        readonly static WeighedSelection<IEffectFactory> effects = new(new IEffectFactory[] {
+            // Damage over time effects
+            new EffectType<Bleeding>(20, (eff, tier) => eff.Damage = strDamage(tier)),
+            new EffectType<AshPoison>(10, (eff, tier) => eff.Damage = intDamage(tier)),
+            new EffectType<SporeCloudPoison>(10, (eff, tier) => eff.Damage = intDamage(tier)),
+            new EffectType<PhasePoisoned>(1, (eff, tier) => eff.DamageIncrement = strDamage(tier)),
+            new EffectType<Poisoned>(20, (eff, tier) => eff.DamageIncrement = strDamage(tier)),
+            new EffectType<PoisonGasPoison>(10, (eff, tier) => eff.Damage = intDamage(tier)),
+
+            // Generic numeric debuffs 
+            new EffectType<ShatterArmor>(20, (eff, tier) => eff.AVPenalty = avPvPenalty(tier)),
+            new EffectType<ShatterMentalArmor>(20, (eff, tier) => eff.MAPenalty = avPvPenalty(tier)),
+            new EffectType<Glowing>(20, (eff, tier) => eff.DVPenalty = avPvPenalty(tier)),
+            new EffectType<Dazed>(5),
+            new EffectType<Disoriented>(5),
+            new EffectType<Hobbled>(3),
+            new EffectType<Lovesick>(5),
+            new EffectType<Shaken>(5),
+            new EffectType<Shamed>(5),
+            new EffectType<AxonsDeflated>(3),
+            new EffectType<BasiliskPoison>(5),
+            new CallbackEffect(_ => new Interdicted(typeof(StarlitKaleidoscope_StaticBurst).FullName, 10), 5),
+
+            // Speciality debuffs
+            new EffectType<CoatedInPlasma>(3),
+            new EffectType<Confused>(3),
+            new EffectType<Exhausted>(3),
+            new EffectType<Ill>(3),
+            new EffectType<Paralyzed>(3),
+            new EffectType<Prone>(3),
+            new EffectType<Stuck>(3),
+            new EffectType<Stun>(3),
+        });
+
         public static void ApplyEffects(GameObject source, GameObject target, int count, int tier) {
-            var effectGenerated = new bool[effects.Length]; 
-            if (count > 10) count = 10;
-            if (count <= 0) return;
-            while (count > 0) {
-                var effect = computedEffects[Stat.Rnd.Next(0, computedEffects.Length)];
-                if (!effectGenerated[effect.Item2]) {
-                    var effectObj = (Effect) Activator.CreateInstance(effect.Item1.effectClass);
-                    ((ITierInitialized) effectObj).Initialize(tier);
-                    target.ApplyEffect(effectObj, source);
-                    effectGenerated[effect.Item2] = true;
-                    count--;
-                }
+            var genEffects = effects.select(count);
+            foreach (var effect in genEffects) {
+                var effectObject = effect.createEffect(tier);
+                var newDuration = durationCap(tier);
+                if (newDuration < effectObject.Duration)
+                    effectObject.Duration = newDuration;
+                target.ApplyEffect(effectObject, source);
             }
         }
     }
