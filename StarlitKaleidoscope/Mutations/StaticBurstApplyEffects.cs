@@ -1,5 +1,7 @@
 ﻿using System;
+using StarlitKaleidoscope.Common;
 using StarlitKaleidoscope.Effects;
+using XRL.Messages;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Effects;
@@ -55,8 +57,8 @@ namespace StarlitKaleidoscope.Mutations {
         }
 
         static int durationCap(int tier) {
-            tier -= 0;
-            return Stat.Random(10 + tier * 10, 20 + tier * 15);
+            tier -= 1;
+            return Stat.Random(15 + tier * 5, 25 + tier * 10);
         }
 
         readonly static WeighedSelection<IEffectFactory> effects = new(new IEffectFactory[] {

@@ -10,6 +10,7 @@
         <intproperty Name="StarlitKaleidoscope_TransientAmmo" Value="1"/>
         <tag Name="DynamicObjectsTable:Ammo"/>
         <tag Name="ExcludeFromTurretStock"/>
+        <tag Name="NoSparkingQuest" />
     </object>
     <object Name="StarlitKaleidoscope_ProjectileFrostSlug" Inherits="BaseLeadSlugProjectile">
         <part Name="Render" DisplayName="{{B|frost slug}}" Tile="items/sw_bullet.bmp"/>
@@ -26,6 +27,7 @@
         <part Name="StarlitKaleidoscope_OverrideWeaponProjectile"/>
         <intproperty Name="StarlitKaleidoscope_TransientAmmo" Value="1"/>
         <tag Name="ExcludeFromTurretStock"/>
+        <tag Name="NoSparkingQuest" />
     </object>
     <object Name="StarlitKaleidoscope_ProjectileFrostArrow" Inherits="BaseArrowProjectile">
         <part Name="Render" DisplayName="{{B|frost arrow}}" ColorString="&amp;B"/>
@@ -35,7 +37,7 @@
     </object>
 
     <object Name="StarlitKaleidoscope_AmalgamatedDross" Inherits="Item">
-        <part Name="Render" Tile="SLK_StaticBurstItems/bits0.png" DetailColor="C" ColorString="&amp;B" DisplayName="amalgamated dross" />
+        <part Name="Render" Tile="SLK_StaticBurstItems/bit0.png" DetailColor="C" ColorString="&amp;B" DisplayName="amalgamated dross" />
         <part Name="Physics" Weight="2" Category="Scrap" />
         <part Name="Description" Short="Experience and recollection diffuse into a torrent of warm static, leaving behind a fragmented amalgam of half-remembered machinery and landscapes." />
         <part Name="Metal" />

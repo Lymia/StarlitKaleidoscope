@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using XRL.Rules;
-using XRL.World;
-using XRL.World.Parts.Mutation;
 
-namespace StarlitKaleidoscope {
+namespace StarlitKaleidoscope.Common {
+
     public interface IWeight {
         int Weight { get; }
     }
@@ -22,11 +21,11 @@ namespace StarlitKaleidoscope {
 
         public T[] select(int count) {
             if (count > values.Length) return originalValues;
-            
+
             var result = new T[count];
             bool[] selected = new bool[values.Length];
             int availableWeight = totalWeight;
-            
+
             for (int i = 0; i < count; i++) {
                 int weight = Stat.Rnd.Next(availableWeight);
                 int j;
@@ -37,7 +36,7 @@ namespace StarlitKaleidoscope {
                     if (weight < currentWeight) break;
                 }
                 if (j == values.Length) throw new Exception("inconsistent state!");
-                
+
                 selected[j] = true;
                 availableWeight -= values[j].Item2;
                 result[i] = values[j].Item1;
@@ -48,23 +47,6 @@ namespace StarlitKaleidoscope {
 
         public T selectOne() {
             return select(1)[0];
-        }
-    }
-
-    public static class SKUtils {
-        public static bool checkRealityDistortion(BaseMutation mutation, Cell targetCell, IEvent E) {
-            if (targetCell == mutation.ParentObject.CurrentCell) {
-                if (!mutation.ParentObject.FireEvent(
-                        Event.New("InitiateRealityDistortionLocal", "Object", mutation.ParentObject, "Mutation",
-                            mutation), E))
-                    return false;
-            } else {
-                Event E1 = Event.New("InitiateRealityDistortionTransit", "Object", mutation.ParentObject, "Mutation",
-                    mutation, "Cell", targetCell);
-                if (!mutation.ParentObject.FireEvent(E1, E) || !targetCell.FireEvent(E1, E))
-                    return false;
-            }
-            return true;
         }
     }
 }

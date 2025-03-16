@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StarlitKaleidoscope.Common;
 using StarlitKaleidoscope.Mutations;
 
 namespace XRL.World.Parts.Mutation {
@@ -13,7 +14,7 @@ namespace XRL.World.Parts.Mutation {
         public int TimeStep;
         public int NoiseSeed;
         public string LitLocationZoneId;
-        public List<FireflyLightCalculator.Loc> LitLocations = new();
+        public List<Loc> LitLocations = new();
 
         [NonSerialized]
         FireflyLightCalculator.CacheContext ctx;

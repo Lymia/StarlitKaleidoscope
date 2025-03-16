@@ -1,8 +1,7 @@
 ﻿using System;
-using StarlitKaleidoscope;
+using StarlitKaleidoscope.Common;
 using StarlitKaleidoscope.Effects;
 using StarlitKaleidoscope.Mutations;
-using XRL.Messages;
 using XRL.Rules;
 using XRL.UI;
 using XRL.World.Capabilities;
@@ -23,8 +22,8 @@ namespace XRL.World.Parts.Mutation {
 
         public int StatusCount(int Level) => 2 + Level / 6;
         public string BurstDamage(int Level) => $"{Level}d3";
-        public int Cooldown(int Level) => 150;
-        public int DestabilizedDuration(int Level) => 8 + Level * 2;
+        public int Cooldown(int Level) => 100;
+        public int DestabilizedDuration(int Level) => 5 + Level * 5;
 
         public override string GetLevelText(int Level) {
             return
@@ -70,14 +69,14 @@ namespace XRL.World.Parts.Mutation {
                 if (ParentObject.IsPlayer()) Popup.ShowFail("There's no animate target there.");
                 return false;
             }
-            if (!SKUtils.checkRealityDistortion(this, targetCell, E))
+            if (!SKUtils.CheckRealityDistortion(this, targetCell, E))
                 return false;
 
             UseEnergy(1000, "Mental Mutation StaticBurst");
             CooldownMyActivatedAbility(StaticBurstActivatedAbilityID, Cooldown(Level));
 
             // Apply the Static Rupture effect.
-            StaticBurstApplyEffects.ApplyEffects(ParentObject, target, StatusCount(Level), ParentObject.GetTier());
+            StaticBurstApplyEffects.ApplyEffects(ParentObject, target, StatusCount(Level), 1 + ParentObject.Level / 6);
             int damage = BurstDamage(Level).Roll();
             target.ApplyEffect(new Destabilized(DestabilizedDuration(Level)), ParentObject);
             target.TakeDamage(ref damage, "Cosmic", Attacker: ParentObject, Message: "from %t blast of warm static!");
@@ -85,7 +84,7 @@ namespace XRL.World.Parts.Mutation {
             // VFX
             if (target.InActiveZone()) {
                 float speed = 3.0f / Stat.RandomCosmetic(2, 20);
-                int life = Stat.RandomCosmetic(10, 60);
+                int life = Stat.RandomCosmetic(5, 15);
                 const float particleCount = 100;
                 for (int index = 0; index < particleCount; ++index) {
                     The.ParticleManager.Add("@", targetCell.X, targetCell.Y,
