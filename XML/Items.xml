@@ -6,8 +6,8 @@
         <part Name="AmmoSlug" ProjectileObject="StarlitKaleidoscope_ProjectileFrostSlug"/>
         <part Name="Physics" Category="Ammo"/>
         <part Name="Description" Short="Frost shaped by mere willpower into a facsimile of a bullet."/>
-        <part Name="StarlitKaleidoscope_OverrideWeaponProjectile"/>
-        <intproperty Name="StarlitKaleidoscope_TransientAmmo" Value="1"/>
+        <part Name="SLKS:OverrideWeaponProjectile"/>
+        <intproperty Name="SLKS:TransientAmmo" Value="1"/>
         <tag Name="DynamicObjectsTable:Ammo"/>
         <tag Name="ExcludeFromTurretStock"/>
         <tag Name="NoSparkingQuest" />
@@ -16,7 +16,7 @@
         <part Name="Render" DisplayName="{{B|frost slug}}" Tile="items/sw_bullet.bmp"/>
         <part Name="Projectile" ColorString="&amp;B" PassByVerb="whiz" BasePenetration="3" BaseDamage="1d6"/>
         <tag Name="ProjectileVFXConfiguration" Value="duration::0.25;;slugColor::#40abff;;trailColor::#40abff"/>
-        <part Name="StarlitKaleidoscope_FrostCondensationOnHit"/>
+        <part Name="SLKS:FrostCondensationOnHit"/>
     </object>
     
     <object Name="StarlitKaleidoscope_Frost Arrow" Inherits="BaseArrow">
@@ -24,8 +24,8 @@
         <part Name="AmmoArrow" ProjectileObject="StarlitKaleidoscope_ProjectileFrostArrow"/>
         <part Name="Description" Short="Frost shaped by mere willpower into a facsimile of an arrow."/>
         <part Name="MissileStatusColor" Color="w"/>
-        <part Name="StarlitKaleidoscope_OverrideWeaponProjectile"/>
-        <intproperty Name="StarlitKaleidoscope_TransientAmmo" Value="1"/>
+        <part Name="SLKS:OverrideWeaponProjectile"/>
+        <intproperty Name="SLKS:TransientAmmo" Value="1"/>
         <tag Name="ExcludeFromTurretStock"/>
         <tag Name="NoSparkingQuest" />
     </object>
@@ -33,7 +33,7 @@
         <part Name="Render" DisplayName="{{B|frost arrow}}" ColorString="&amp;B"/>
         <part Name="Projectile" StrengthPenetration="6" BaseDamage="1d4" ColorString="&amp;B"/>
         <tag Name="ProjectileVFXConfiguration" Value="duration::0.25;;shaftColor::#40abff;;headColor::#40abff;;trailColor::#40abff"/>
-        <part Name="StarlitKaleidoscope_FrostCondensationOnHit"/>
+        <part Name="SLKS:FrostCondensationOnHit"/>
     </object>
 
     <object Name="StarlitKaleidoscope_AmalgamatedDross" Inherits="Item">

@@ -1,16 +1,21 @@
 ﻿using System;
+using StarlitKaleidoscope.Parts.Generic;
+using XRL;
 using XRL.Messages;
 using XRL.UI;
+using XRL.World;
+using XRL.World.Parts;
+using XRL.World.Parts.Mutation;
 
-namespace XRL.World.Parts.Mutation {
-    public class StarlitKaleidoscope_FrostCondensation : BaseMutation {
+namespace StarlitKaleidoscope.Parts.Mutations {
+    public class FrostCondensation : BaseMutation {
         public const string FrostCondensationCommand = "StarlitKaleidoscope_FrostCondensation";
         public const string FrostSlugItem = "StarlitKaleidoscope_Frost Slug";
         public const string FrostArrowItem = "StarlitKaleidoscope_Frost Arrow";
 
         public Guid FrostCondensationActivatedAbilityID = Guid.Empty;
 
-        public StarlitKaleidoscope_FrostCondensation() {
+        public FrostCondensation() {
             DisplayName = "Frost Condensation";
             Type = "Mental";
         }
@@ -99,7 +104,7 @@ namespace XRL.World.Parts.Mutation {
                 // create the frost slug items
                 var ammo = GameObject.Create(isSlug ? FrostSlugItem : FrostArrowItem);
                 ammo.Count = ammoLoader.MaxAmmo;
-                var overrideStats = ammo.GetPart<StarlitKaleidoscope_OverrideWeaponProjectile>();
+                var overrideStats = ammo.GetPart<OverrideWeaponProjectile>();
                 if (overrideStats == null) throw new Exception("OverrideWeaponProjectile part is missing?");
                 overrideStats.OverrideStats = true;
 

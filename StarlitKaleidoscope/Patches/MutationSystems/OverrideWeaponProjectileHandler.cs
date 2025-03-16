@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using StarlitKaleidoscope.Parts.Generic;
 using XRL.World;
 using XRL.World.Parts;
 
@@ -20,7 +21,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
         static bool overrideAmmo;
 
         static void Prefix(MagazineAmmoLoader __instance) {
-            overrideAmmo = __instance.Ammo != null && __instance.Ammo.HasPart<StarlitKaleidoscope_OverrideWeaponProjectile>();
+            overrideAmmo = __instance.Ammo != null && __instance.Ammo.HasPart<OverrideWeaponProjectile>();
         }
 
         public static string GetProjectileObject(MagazineAmmoLoader loader) {
@@ -30,7 +31,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
 
         public static GameObject GetProjectileFor(GameObject Ammo, GameObject Launcher) {
             GameObject target = GetProjectileObjectEvent.GetFor(Ammo, Launcher);
-            if (Ammo.TryGetPart<StarlitKaleidoscope_OverrideWeaponProjectile>(out var overrideProjectile)) {
+            if (Ammo.TryGetPart<OverrideWeaponProjectile>(out var overrideProjectile)) {
                 if (target.TryGetPart<Projectile>(out var targetProjectile)) {
                     if (overrideProjectile.OverrideStats) {
                         targetProjectile.BasePenetration = overrideProjectile.BasePenetration;
@@ -43,7 +44,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
                     }
                 }
 
-                if (target.TryGetPart<StarlitKaleidoscope_FrostCondensationOnHit>(out var targetFrostCondensation)) {
+                if (target.TryGetPart<FrostCondensationOnHit>(out var targetFrostCondensation)) {
                     if (overrideProjectile.FrostCondensationTemperatureChange != null)
                         targetFrostCondensation.TemperatureChange = overrideProjectile.FrostCondensationTemperatureChange;
                     if (overrideProjectile.FrostCondensationBonusColdDamage != null)

@@ -1,18 +1,22 @@
 ﻿using System;
 using StarlitKaleidoscope.Common;
-using StarlitKaleidoscope.Effects;
 using StarlitKaleidoscope.Mutations;
+using StarlitKaleidoscope.Parts.Effects;
+using XRL;
 using XRL.Rules;
 using XRL.UI;
+using XRL.World;
 using XRL.World.Capabilities;
+using XRL.World.Parts;
+using XRL.World.Parts.Mutation;
 
-namespace XRL.World.Parts.Mutation {
-    public class StarlitKaleidoscope_StaticBurst : BaseMutation {
+namespace StarlitKaleidoscope.Parts.Mutations {
+    public class StaticBurst : BaseMutation {
         public const string StaticBurstCommand = "StarlitKaleidoscope_StaticBurst";
 
         public Guid StaticBurstActivatedAbilityID = Guid.Empty;
 
-        public StarlitKaleidoscope_StaticBurst() {
+        public StaticBurst() {
             DisplayName = "Static Rupture";
             Type = "Mental";
         }
@@ -59,7 +63,10 @@ namespace XRL.World.Parts.Mutation {
             Cell targetCell = PickDestinationCell(80, IgnoreLOS: true, Label: "Static Rupture", Snap: true);
             if (targetCell == null) return false;
 
+            // find the target of the ability
             GameObject target = targetCell.GetCombatTarget(ParentObject, true, Phase: Phase.PHASE_INSENSITIVE);
+            if (!target.HasPart<Brain>())
+                target = null;
             if (target == null)
                 target = targetCell.GetFirstObjectWithPart("Brain");
             if (target == ParentObject && target.IsPlayer() &&
@@ -69,9 +76,10 @@ namespace XRL.World.Parts.Mutation {
                 if (ParentObject.IsPlayer()) Popup.ShowFail("There's no animate target there.");
                 return false;
             }
+            
+            // bookkeeping
             if (!SKUtils.CheckRealityDistortion(this, targetCell, E))
                 return false;
-
             UseEnergy(1000, "Mental Mutation StaticBurst");
             CooldownMyActivatedAbility(StaticBurstActivatedAbilityID, Cooldown(Level));
 

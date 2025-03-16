@@ -1,9 +1,12 @@
 ﻿using System;
 using UnityEngine.Serialization;
+using XRL;
+using XRL.World;
+using XRL.World.Parts;
 
-namespace XRL.World.Parts {
+namespace StarlitKaleidoscope.Parts.Generic {
     [Serializable]
-    public class StarlitKaleidoscope_FrostCondensationOnHit : IPart {
+    public class FrostCondensationOnHit : IPart {
         [FormerlySerializedAs("Amount")]
         public string TemperatureChange = null;
 

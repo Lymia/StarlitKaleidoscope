@@ -3,7 +3,7 @@ using UnityEngine.Serialization;
 using XRL.Rules;
 using XRL.World;
 
-namespace StarlitKaleidoscope.Effects {
+namespace StarlitKaleidoscope.Parts.Effects {
     [Serializable]
     public class Glowing : Effect, ITierInitialized {
         public int GlowRadius;

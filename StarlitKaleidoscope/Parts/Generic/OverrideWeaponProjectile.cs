@@ -1,9 +1,10 @@
 ﻿using System;
+using XRL.World;
 
-namespace XRL.World.Parts {
+namespace StarlitKaleidoscope.Parts.Generic {
     // While not ideal, this part serves entirely as a marker for modified code in MagazineAmmoLoader
     [Serializable]
-    public class StarlitKaleidoscope_OverrideWeaponProjectile : IPart {
+    public class OverrideWeaponProjectile : IPart {
         public bool OverrideStats = false;
         public int BasePenetration = 1;
         public string BaseDamage = "1d4";

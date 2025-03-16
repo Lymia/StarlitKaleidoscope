@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using StarlitKaleidoscope.Effects;
+using StarlitKaleidoscope.Parts.Effects;
 using XRL;
 using XRL.World;
 using XRL.World.Parts.Mutation;

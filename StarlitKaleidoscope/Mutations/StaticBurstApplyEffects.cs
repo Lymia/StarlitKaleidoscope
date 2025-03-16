@@ -1,11 +1,10 @@
 ﻿using System;
 using StarlitKaleidoscope.Common;
-using StarlitKaleidoscope.Effects;
-using XRL.Messages;
+using StarlitKaleidoscope.Parts.Effects;
+using StarlitKaleidoscope.Parts.Mutations;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Effects;
-using XRL.World.Parts.Mutation;
 
 namespace StarlitKaleidoscope.Mutations {
     public static class StaticBurstApplyEffects {
@@ -82,7 +81,7 @@ namespace StarlitKaleidoscope.Mutations {
             new EffectType<Shamed>(5),
             new EffectType<AxonsDeflated>(3),
             new EffectType<BasiliskPoison>(5),
-            new CallbackEffect(_ => new Interdicted(typeof(StarlitKaleidoscope_StaticBurst).FullName, 10), 5),
+            new CallbackEffect(_ => new Interdicted(typeof(StaticBurst).FullName, 10), 5),
 
             // Speciality debuffs
             new EffectType<CoatedInPlasma>(3),

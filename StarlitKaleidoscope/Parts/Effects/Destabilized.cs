@@ -4,12 +4,11 @@ using ConsoleLib.Console;
 using StarlitKaleidoscope.Common;
 using StarlitKaleidoscope.Mutations;
 using XRL;
-using XRL.Messages;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Parts;
 
-namespace StarlitKaleidoscope.Effects {
+namespace StarlitKaleidoscope.Parts.Effects {
     [Serializable]
     public class Destabilized : Effect, ITierInitialized {
         const int GlitchEffectDuration = 6;

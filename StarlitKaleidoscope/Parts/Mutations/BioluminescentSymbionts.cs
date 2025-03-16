@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using StarlitKaleidoscope.Common;
 using StarlitKaleidoscope.Mutations;
+using XRL.World;
+using XRL.World.Parts.Mutation;
 
-namespace XRL.World.Parts.Mutation {
+namespace StarlitKaleidoscope.Parts.Mutations {
     [Serializable]
-    public class StarlitKaleidoscope_BioluminescentSymbionts : BaseMutation {
-        public StarlitKaleidoscope_BioluminescentSymbionts() {
+    public class BioluminescentSymbionts : BaseMutation {
+        public BioluminescentSymbionts() {
             DisplayName = "Bioluminescent Symbionts";
             Type = "Physical";
         }
@@ -31,7 +33,7 @@ namespace XRL.World.Parts.Mutation {
         }
 
         public override IPart DeepCopy(GameObject Parent, Func<GameObject, GameObject> MapInv) {
-            var newObj = base.DeepCopy(Parent, MapInv) as StarlitKaleidoscope_BioluminescentSymbionts;
+            var newObj = base.DeepCopy(Parent, MapInv) as BioluminescentSymbionts;
             newObj.reseed();
             newObj.TimeStep = 0;
             newObj.updateLightCells(Parent.CurrentCell);
