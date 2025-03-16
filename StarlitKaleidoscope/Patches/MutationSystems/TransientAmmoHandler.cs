@@ -9,7 +9,7 @@ namespace StarlitKaleidoscope.Patches.MutationSystems {
     [HarmonyPatch(typeof(MagazineAmmoLoader), nameof(MagazineAmmoLoader.HandleEvent), typeof(InventoryActionEvent))]
     public static class TransientAmmoHandler {
         public static bool CheckIsTransientAmmo(MagazineAmmoLoader loader, InventoryActionEvent E) {
-            if (loader.Ammo != null && loader.Ammo.GetIntProperty("SLK:TransientAmmo") == 1) {
+            if (loader.Ammo != null && loader.Ammo.GetIntProperty("SLKS:TransientAmmo") == 1) {
                 if (E.Actor.IsPlayer())
                     E.Actor.EmitMessage(
                         loader.Ammo.Does("melt") + " away as you unload " + loader.Ammo.them + "."
