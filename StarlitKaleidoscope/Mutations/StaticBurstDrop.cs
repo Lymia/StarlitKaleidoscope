@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using XRL.Messages;
 using XRL.Rules;
 using XRL.World;
 using XRL.World.Parts;
@@ -9,7 +8,7 @@ using XRL.World.Tinkering;
 
 namespace StarlitKaleidoscope.Mutations {
     public static class StaticBurstDrop {
-        const int BitTextureCount = 10;
+        readonly static int[] BitTextures = new int[] { 0, 1, 2, 3, 4, 6, 7 };
 
         public static List<GameObject> CreateDrops(GameObject source) {
             var list = new List<GameObject>();
@@ -55,7 +54,7 @@ namespace StarlitKaleidoscope.Mutations {
                     detail = Crayons.AllColors[seededRandom.Next(Crayons.AllColors.Length)][0];
                 render.ColorString = $"&{color}";
                 render.DetailColor = detail.ToString();
-                render.Tile = $"SLK_StaticBurstItems/bit{seededRandom.Next(0, BitTextureCount)}.png";
+                render.Tile = $"SLK_StaticBurstItems/bit{BitTextures[seededRandom.Next(0, BitTextures.Length)]}.png";
             }
             
             // randomize cost
