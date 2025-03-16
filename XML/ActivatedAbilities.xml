@@ -15,6 +15,16 @@
         <UITile Tile="SLK_Mutations/abil_frostcondensation_toggle_on.png" Foreground="B" Detail="C" State="ToggleOn" />
     </ability>
     
+    <!-- Static Burst -->
+    <ability Command="StarlitKaleidoscope_StaticBurst">
+        <description>
+            <p>You create a burst of static, damaging your target and inflicting <stat Name="StatusCount"/> random negative statuses.</p>
+            <br/>
+            <statline Name="BurstDamage" DisplayName="Burst Damage" />
+        </description>
+        <UITile Tile="SLK_Mutations/staticburst.png" Foreground="y" Detail="w" />
+    </ability>
+    
     <!-- Reworked Light Manipulation. -->
     <ability Command="CommandLase">
         <description>

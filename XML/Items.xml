@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <objects>
-    <!-- Frost Condensation Projectiles -->
+    <!-- Frost Condensation items -->
     <object Name="StarlitKaleidoscope_Frost Slug" Inherits="Projectile">
         <part Name="Render" DisplayName="frost slug" ColorString="&amp;B" DetailColor="B" Tile="items/sw_bullet.bmp"/>
         <part Name="AmmoSlug" ProjectileObject="StarlitKaleidoscope_ProjectileFrostSlug"/>
@@ -36,6 +36,7 @@
         <part Name="SLKS:FrostCondensationOnHit"/>
     </object>
 
+    <!-- Static Rupture items -->
     <object Name="StarlitKaleidoscope_AmalgamatedDross" Inherits="Item">
         <part Name="Render" Tile="SLK_StaticBurstItems/bit0.png" DetailColor="C" ColorString="&amp;B" DisplayName="amalgamated dross" />
         <part Name="Physics" Weight="2" Category="Scrap" />
