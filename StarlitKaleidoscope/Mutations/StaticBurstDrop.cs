@@ -8,7 +8,7 @@ using XRL.World.Tinkering;
 
 namespace StarlitKaleidoscope.Mutations {
     public static class StaticBurstDrop {
-        readonly static int[] BitTextures = new int[] { 0, 1, 2, 3, 4, 6, 7 };
+        readonly static int[] BitTextures = { 0, 1, 2, 3, 4, 6, 7 };
 
         public static List<GameObject> CreateDrops(GameObject source) {
             var list = new List<GameObject>();
@@ -17,7 +17,7 @@ namespace StarlitKaleidoscope.Mutations {
             var dross = createDross(source, tier);
             dross.Count = source.HasPart<GivesRep>() ? Stat.Random(1, tier) : 1;
             list.Add(dross);
-            
+
             return list;
         }
 
@@ -34,7 +34,7 @@ namespace StarlitKaleidoscope.Mutations {
                     builder.Append('0');
                 var maxTier = Math.Min(tier, 8);
                 for (int i = 0; i <= maxTier; i++) {
-                    var presenceChance = Math.Min(0.2f + (tier - i) * 0.075f, 0.5f);
+                    var presenceChance = Math.Min(0.2f + (tier - i) * 0.075f, 1f / 3f);
                     if (maxTier == i) presenceChance += 0.3f;
                     if (bitsRandom.NextDouble() < presenceChance) {
                         builder.Append(i);
@@ -56,7 +56,7 @@ namespace StarlitKaleidoscope.Mutations {
                 render.DetailColor = detail.ToString();
                 render.Tile = $"SLK_StaticBurstItems/bit{BitTextures[seededRandom.Next(0, BitTextures.Length)]}.png";
             }
-            
+
             // randomize cost
             if (obj.TryGetPart<Commerce>(out var commerce)) {
                 var cappedTier = Math.Min(tier, 8);
@@ -65,7 +65,7 @@ namespace StarlitKaleidoscope.Mutations {
                 var cost = (int) (baseCost * costFactor);
                 commerce.Value = Math.Max(1, cost);
             }
-            
+
             return obj;
         }
     }
