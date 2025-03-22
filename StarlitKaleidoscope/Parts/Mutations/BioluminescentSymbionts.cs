@@ -45,6 +45,7 @@ namespace StarlitKaleidoscope.Parts.Mutations {
         }
 
         void updateLightCells(Cell basisCell) {
+            if (basisCell == null) return;
             if (NoiseSeed == 0) reseed();
             
             if (ctx == null)
