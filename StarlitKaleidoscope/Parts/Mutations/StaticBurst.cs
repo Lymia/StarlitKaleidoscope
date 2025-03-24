@@ -78,7 +78,7 @@ namespace StarlitKaleidoscope.Parts.Mutations {
             }
             
             // bookkeeping
-            if (!SKUtils.CheckRealityDistortion(this, targetCell, E))
+            if (!this.CheckRealityDistortion(targetCell, E))
                 return false;
             UseEnergy(1000, "Mental Mutation StaticBurst");
             CooldownMyActivatedAbility(StaticBurstActivatedAbilityID, Cooldown(Level));

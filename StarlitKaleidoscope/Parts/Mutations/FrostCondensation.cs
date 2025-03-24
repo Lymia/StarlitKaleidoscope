@@ -1,4 +1,5 @@
 ﻿using System;
+using StarlitKaleidoscope.Common;
 using StarlitKaleidoscope.Parts.Generic;
 using XRL;
 using XRL.Messages;
@@ -104,7 +105,7 @@ namespace StarlitKaleidoscope.Parts.Mutations {
                 // create the frost slug items
                 var ammo = GameObject.Create(isSlug ? FrostSlugItem : FrostArrowItem);
                 ammo.Count = ammoLoader.MaxAmmo;
-                var overrideStats = ammo.GetPart<OverrideWeaponProjectile>();
+                var overrideStats = ammo.FastGetPart<OverrideWeaponProjectile>();
                 if (overrideStats == null) throw new Exception("OverrideWeaponProjectile part is missing?");
                 overrideStats.OverrideStats = true;
 

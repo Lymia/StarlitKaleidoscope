@@ -52,7 +52,7 @@ namespace StarlitKaleidoscope.Mutations {
                 if (visited.Add(elem)) {
                     var noiseValue = noise.GetNoise(CoordScale * elem.x, CoordScale * elem.y, timeCoord);
                     if (priority >= noiseValue * finalNoiseMagnitude) continue;
-                    if (!SKUtils.IsValidLoc(zone, elem.x, elem.y)) continue;
+                    if (!zone.IsValidLoc(elem.x, elem.y)) continue;
                     
                     var cell = zone.Map[elem.x][elem.y];
                     illuminated.Add(elem);

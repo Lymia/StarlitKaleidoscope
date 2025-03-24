@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <mutations>
     <category Name="Physical">
-        <mutation Name="Bioluminescent Symbionts" Cost="2" MaxSelected="1" Class="SLKS:BioluminescentSymbionts" Exclusions="" BearerDescription="swarm-bearers" BiomeAdjective="luminous" Tile="SLK_Mutations/biolum.png" />
+        <mutation Name="Bioluminescent Symbionts" Cost="2" MaxSelected="1" Class="SLKS_BioluminescentSymbionts" Exclusions="" BearerDescription="swarm-bearers" BiomeAdjective="luminous" Tile="SLK_Mutations/biolum.png" />
     </category>
     <category Name="Mental">
-        <mutation Name="Frost Condensation" Cost="4" MaxSelected="1" Class="SLKS:FrostCondensation" Exclusions="" BearerDescription="cryomancers" BiomeAdjective="frost meadow" Tile="SLK_Mutations/frostcondensation.png" />
-        <mutation Name="Static Rupture" Cost="5" MaxSelected="1" Class="SLKS:StaticBurst" Exclusions="" BearerDescription="corrupted" BiomeAdjective="corrupted" Tile="SLK_Mutations/staticburst.png" />
+        <mutation Name="Frost Condensation" Cost="4" MaxSelected="1" Class="SLKS_FrostCondensation" Exclusions="" BearerDescription="cryomancers" BiomeAdjective="frost meadow" Tile="SLK_Mutations/frostcondensation.png" />
+        <mutation Name="Static Rupture" Cost="5" MaxSelected="1" Class="SLKS_StaticBurst" Exclusions="" BearerDescription="corrupted" BiomeAdjective="corrupted" Tile="SLK_Mutations/staticburst.png" />
     </category>
 </mutations>

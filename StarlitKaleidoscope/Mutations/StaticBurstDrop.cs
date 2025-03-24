@@ -13,12 +13,58 @@ namespace StarlitKaleidoscope.Mutations {
         public static List<GameObject> CreateDrops(GameObject source) {
             var list = new List<GameObject>();
             var tier = source.GetTier();
+            var type = getDropType(source);
 
+            // Add dross
             var dross = createDross(source, tier);
-            dross.Count = source.HasPart<GivesRep>() ? Stat.Random(1, tier) : 1;
+            dross.Count = type != DropType.Normal ? Stat.Random(1, tier) : 1;
             list.Add(dross);
-
+            
+            switch (type) {
+                case DropType.Normal:
+                    break;
+                case DropType.GenericLegendary:
+                    break;
+                case DropType.UniqueLegendary:
+                    break;
+                case DropType.SpecialEncounter:
+                    break;
+            }
+            
             return list;
+        }
+
+        enum DropType {
+            Normal,
+            GenericLegendary,
+            UniqueLegendary,
+            SpecialEncounter,
+        }
+
+        static Dictionary<string, DropType> staticDropType = new();
+
+        static StaticBurstDrop() {
+            staticDropType["skybear"] = DropType.UniqueLegendary;
+        }
+
+        static DropType getDropType(GameObject source) {
+            // Creatures with these tags respawn, or just...generally aren't dying. Do not try to drop special loot. 
+            if (source.HasPart<Reconstitution>() || source.HasObjectInInventory("BarathrumiteSafetyBand"))
+                return DropType.Normal;
+
+            // Check static tables
+            if (staticDropType.TryGetValue(source.Blueprint, out var type))
+                return type;
+
+            // Check for legendary creatures now
+            if (source.HasPart<GivesRep>()) {
+                if (source.HasPart<GameUnique>()) return DropType.UniqueLegendary;
+                if (source.HasTag("Worshippable")) return DropType.SpecialEncounter;
+                return DropType.GenericLegendary;
+            }
+
+            // Dunno what this is!
+            return DropType.SpecialEncounter;
         }
 
         static GameObject createDross(GameObject source, int tier) {

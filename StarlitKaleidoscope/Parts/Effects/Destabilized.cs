@@ -152,7 +152,7 @@ namespace StarlitKaleidoscope.Parts.Effects {
                 var yAdd = Stat.RandomCosmetic(-1, 1);
                 loc = loc.Add(xAdd, yAdd);
             }
-            if (SKUtils.IsValidLoc(Object.CurrentZone, loc.x, loc.y) && !locations.ContainsKey(loc))
+            if (Object.CurrentZone.IsValidLoc(loc.x, loc.y) && !locations.ContainsKey(loc))
                 locations.Add(loc, new GlitchEffectParams());
         }
 
@@ -181,6 +181,7 @@ namespace StarlitKaleidoscope.Parts.Effects {
         }
 
         public override bool Apply(GameObject obj) {
+            if (!obj.HasPart<Brain>()) return false; // exclude inanimate objects, as a procaution
             if (obj.TryGetEffect<Destabilized>(out var existingEffect)) {
                 existingEffect.Duration += Duration;
                 return false;
